@@ -17,13 +17,13 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "com.rhseung.backpack.Backpack",
+				"value": "com.rhseung.backpack.ModMain",
 				"adapter": "kotlin"
 			}
 		],
 		"fabric-datagen": [
 			{
-				"value": "com.rhseung.backpack.BackpackDataGenerator",
+				"value": "com.rhseung.backpack.ModData",
 				"adapter": "kotlin"
 			}
 		]

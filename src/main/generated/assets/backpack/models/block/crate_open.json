@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "backpack:block/crate_bottom",
+    "side": "backpack:block/crate_side",
+    "top": "backpack:block/crate_top_open"
+  }
+}
