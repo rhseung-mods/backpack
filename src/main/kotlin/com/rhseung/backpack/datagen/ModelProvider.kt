@@ -1,5 +1,6 @@
 package com.rhseung.backpack.datagen
 
+import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModBlocks
 import com.rhseung.backpack.init.ModItems
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -24,6 +25,10 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
     }
 
     override fun generateItemModels(itemModel: ItemModelGenerator) {
-        itemModel.register(ModItems.BACKPACK, Models.GENERATED);
+        // TODO: opened texture using override
+        Models.GENERATED_TWO_LAYERS.upload(ModelIds.getItemModelId(ModItems.BACKPACK), TextureMap.layered(
+            ModMain.of("backpack").withPrefixedPath("item/"),
+            ModMain.of("backpack_color_panel").withPrefixedPath("item/")
+        ), itemModel.writer);
     }
 }

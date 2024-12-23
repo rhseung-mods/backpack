@@ -1,15 +1,14 @@
-package com.rhseung.backpack.item
+package com.rhseung.backpack.backpack
 
+import com.rhseung.backpack.init.ModComponents
 import com.rhseung.backpack.init.ModSounds
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.screen.GenericContainerScreenHandler
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.sound.SoundCategory
-import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
@@ -39,6 +38,8 @@ class BackpackItem(val size: BackpackSize, settings: Settings) : Item(settings.m
                     return Text.of("Backpack");
                 }
             });
+
+            backpack.set(ModComponents.BACKPACK_OPEN, true);
         }
     }
 }

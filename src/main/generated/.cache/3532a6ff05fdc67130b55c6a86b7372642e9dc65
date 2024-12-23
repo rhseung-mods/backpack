@@ -1,6 +1,6 @@
-// 1.21.3	2024-11-25T21:18:15.1501156	Backpack/Model Definitions
+// 1.21.3	2024-12-23T18:00:41.0590774	Backpack/Model Definitions
 79fe021b30d0a91b92162cc9b701d0b32898a488 assets\backpack\models\block\crate.json
+a22429473a2a5c77dd261aa62369421434593202 assets\backpack\models\item\backpack.json
 015b228d0eae75ff9a5c104aa1d9960faf1be98f assets\backpack\models\block\crate_open.json
-4a1b078c6862c3091bdb591ef1ae15ab03501042 assets\backpack\models\item\crate.json
-d8995bada379c5e6275fda1f9f39180859ac4053 assets\backpack\models\item\backpack.json
 2e182363a2622c9f54e75268085c463a0c9a2a8a assets\backpack\blockstates\crate.json
+4a1b078c6862c3091bdb591ef1ae15ab03501042 assets\backpack\models\item\crate.json

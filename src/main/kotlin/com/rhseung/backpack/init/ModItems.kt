@@ -1,8 +1,8 @@
 package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
-import com.rhseung.backpack.item.BackpackItem
-import com.rhseung.backpack.item.BackpackSize
+import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.backpack.BackpackSize
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.minecraft.item.Item
 import net.minecraft.item.Item.Settings
@@ -26,5 +26,5 @@ object ModItems {
         return settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, ModMain.of(id)));
     }
 
-    val BACKPACK = register("backpack", BackpackItem(BackpackSize._9X3, ofSetting("backpack")), ItemGroups.TOOLS);
+    val BACKPACK = register("backpack", BackpackItem(BackpackSize.`9X3`, ofSetting("backpack")), ItemGroups.TOOLS);
 }

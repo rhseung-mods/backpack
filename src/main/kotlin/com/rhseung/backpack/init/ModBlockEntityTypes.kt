@@ -1,6 +1,6 @@
 package com.rhseung.backpack.init
 
-import com.rhseung.backpack.blockentity.CrateBlockEntity
+import com.rhseung.backpack.crate.CrateBlockEntity
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType

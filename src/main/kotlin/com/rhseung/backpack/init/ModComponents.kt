@@ -1,8 +1,9 @@
 package com.rhseung.backpack.init
 
+import com.mojang.serialization.Codec
 import com.rhseung.backpack.ModMain
-import com.rhseung.backpack.item.BackpackContainer
 import net.minecraft.component.ComponentType
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 
@@ -13,7 +14,7 @@ object ModComponents {
         return Registry.register(Registries.DATA_COMPONENT_TYPE, ModMain.of(path), builder(ComponentType.builder()).build());
     }
 
-//    val BACKPACK_CONTENTS: ComponentType<BackpackContainer> = register("backpack_contents") { builder ->
-//        builder.codec(BackpackContainer.CODEC).packetCodec(BackpackContainer.PACKET_CODEC).cache();
-//    }
+    val BACKPACK_OPEN = register("backpack_open") { builder ->
+        builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL);
+    }
 }

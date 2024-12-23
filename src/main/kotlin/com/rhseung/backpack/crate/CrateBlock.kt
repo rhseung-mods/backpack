@@ -1,7 +1,6 @@
-package com.rhseung.backpack.block
+package com.rhseung.backpack.crate
 
 import com.mojang.serialization.MapCodec
-import com.rhseung.backpack.blockentity.CrateBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState

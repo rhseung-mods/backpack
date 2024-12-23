@@ -1,4 +1,4 @@
-package com.rhseung.backpack.item
+package com.rhseung.backpack.backpack
 
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ContainerComponent

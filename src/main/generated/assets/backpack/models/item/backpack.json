@@ -1,6 +1,15 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "predicate": {
+        "open": 1
+      },
+      "model": "backpack:item/open_backpack"
+    }
+  ],
   "textures": {
-    "layer0": "backpack:item/backpack"
+    "layer0": "backpack:item/backpack",
+    "layer1": "backpack:item/backpack_color_panel"
   }
 }

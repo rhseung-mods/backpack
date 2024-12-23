@@ -1,6 +1,5 @@
-package com.rhseung.backpack.blockentity
+package com.rhseung.backpack.crate
 
-import com.rhseung.backpack.block.CrateBlock
 import com.rhseung.backpack.init.ModBlockEntityTypes
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.LootableContainerBlockEntity
@@ -84,11 +83,11 @@ class CrateBlockEntity(
     }
 
     fun setOpen(state: BlockState, open: Boolean) {
-        this.world?.setBlockState(this.getPos(), state.with(CrateBlock.OPEN, open), 3);
+        this.world?.setBlockState(this.getPos(), state.with(CrateBlock.Companion.OPEN, open), 3);
     }
 
     fun playSound(state: BlockState, soundEvent: SoundEvent) {
-        val vec3i = state.get(CrateBlock.FACING).vector;
+        val vec3i = state.get(CrateBlock.Companion.FACING).vector;
         val d = pos.x.toDouble() + 0.5 + vec3i.x.toDouble() / 2.0;
         val e = pos.y.toDouble() + 0.5 + vec3i.y.toDouble() / 2.0;
         val f = pos.z.toDouble() + 0.5 + vec3i.z.toDouble() / 2.0;

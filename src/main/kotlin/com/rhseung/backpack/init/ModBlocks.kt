@@ -1,7 +1,7 @@
 package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
-import com.rhseung.backpack.block.CrateBlock
+import com.rhseung.backpack.crate.CrateBlock
 import com.rhseung.backpack.init.ModItems.register
 import net.minecraft.block.AbstractBlock.Settings
 import net.minecraft.block.Block
