@@ -16,20 +16,15 @@ import net.minecraft.registry.RegistryKeys
 object ModItems {
     fun load() {}
 
-    fun <T : Item> registerItem(path: String, item: T, group: RegistryKey<ItemGroup>? = null): T {
+    fun <T : Item> register(path: String, item: T, group: RegistryKey<ItemGroup>? = null): T {
         val ret = Registry.register(Registries.ITEM, ModMain.of(path), item);
         group?.let { ItemGroupEvents.modifyEntriesEvent(it).register { entries -> entries.add(ret) } }
         return ret;
     }
 
-    val BACKPACK = registerItem(
-        "backpack", BackpackItem(BackpackSize.GENERIC_9X3,
-            Settings().registryKey(
-                RegistryKey.of(
-                    RegistryKeys.ITEM, ModMain
-                        .of("backpack")
-                )
-            )
-        ), ItemGroups.TOOLS
-    );
+    fun ofSetting(id: String, settings: Settings = Settings()): Settings {
+        return settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, ModMain.of(id)));
+    }
+
+    val BACKPACK = register("backpack", BackpackItem(BackpackSize._9X3, ofSetting("backpack")), ItemGroups.TOOLS);
 }

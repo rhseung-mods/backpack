@@ -4,6 +4,7 @@ import com.rhseung.backpack.init.ModBlockEntityTypes
 import com.rhseung.backpack.init.ModBlocks
 import com.rhseung.backpack.init.ModComponents
 import com.rhseung.backpack.init.ModItems
+import com.rhseung.backpack.init.ModSounds
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
@@ -19,5 +20,6 @@ object ModMain : ModInitializer {
 		ModBlocks.load();
 		ModComponents.load();
 		ModBlockEntityTypes.load();
+		ModSounds.load();
 	}
 }

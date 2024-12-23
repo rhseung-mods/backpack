@@ -2,8 +2,7 @@ package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.block.CrateBlock
-import com.rhseung.backpack.init.ModItems.registerItem
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import com.rhseung.backpack.init.ModItems.register
 import net.minecraft.block.AbstractBlock.Settings
 import net.minecraft.block.Block
 import net.minecraft.block.Blocks
@@ -23,7 +22,7 @@ object ModBlocks {
         val id = ModMain.of(path);
         val registryKey = RegistryKey.of(RegistryKeys.ITEM, id);
         val ret = Registry.register(Registries.BLOCK, id, block);
-        registerItem(path, BlockItem(ret, Item.Settings().registryKey(registryKey)), group);
+        register(path, BlockItem(ret, Item.Settings().registryKey(registryKey)), group);
         return ret;
     }
 

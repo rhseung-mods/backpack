@@ -1,6 +1,6 @@
 package com.rhseung.backpack.item
 
-import com.rhseung.backpack.init.ModComponents
+import com.rhseung.backpack.init.ModSounds
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
@@ -15,15 +15,14 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.world.World
 
-class BackpackItem(val size: BackpackSize, settings: Settings) : Item(settings
-    .maxCount(1)
-) {
+class BackpackItem(val size: BackpackSize, settings: Settings) : Item(settings.maxCount(1)) {
     override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
         user.setCurrentHand(hand);
 
         if (world.isClient)
-            world.playSound(user, user.blockPos, SoundEvents.BLOCK_BARREL_OPEN, SoundCategory.PLAYERS, 1f, 1f);
-        BackpackItem.openScreen(size, user, user.getStackInHand(hand));
+            world.playSound(user, user.blockPos, ModSounds.OPEN_BACKPACK, SoundCategory.PLAYERS, 1f, 1f);
+
+        openScreen(size, user, user.getStackInHand(hand));
 
         return ActionResult.SUCCESS.withNewHandStack(user.getStackInHand(hand));
     }
@@ -33,12 +32,11 @@ class BackpackItem(val size: BackpackSize, settings: Settings) : Item(settings
             player.openHandledScreen(object : NamedScreenHandlerFactory {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     val inventory = BackpackContainer(size, backpack);
-                    val ret = GenericContainerScreenHandler(size.toScreenHandlerType(), syncId, playerInventory, inventory, size.row);
-                    return ret;
+                    return BackpackScreenHandler(size.toScreenHandlerType(), syncId, playerInventory, inventory, size.row);
                 }
 
                 override fun getDisplayName(): Text {
-                    return Text.literal("Backpack");
+                    return Text.of("Backpack");
                 }
             });
         }
