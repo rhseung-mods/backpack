@@ -16,5 +16,6 @@ class LanguageProvider(
     override fun generateTranslations(lookUp: RegistryWrapper.WrapperLookup, translationBuilder: TranslationBuilder) {
         translationBuilder.add(ModBlocks.CRATE, "Crate");
         translationBuilder.add(ModItems.BACKPACK, "Backpack");
+        translationBuilder.add("container.backpack", "Backpack");
     }
 }

@@ -1,6 +1,8 @@
 package com.rhseung.backpack.datagen
 
 import com.rhseung.backpack.ModMain
+import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.datagen.helper.ItemModelHelper
 import com.rhseung.backpack.init.ModBlocks
 import com.rhseung.backpack.init.ModItems
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -25,10 +27,27 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
     }
 
     override fun generateItemModels(itemModel: ItemModelGenerator) {
-        // TODO: opened texture using override
-        Models.GENERATED_TWO_LAYERS.upload(ModelIds.getItemModelId(ModItems.BACKPACK), TextureMap.layered(
-            ModMain.of("backpack").withPrefixedPath("item/"),
-            ModMain.of("backpack_color_panel").withPrefixedPath("item/")
-        ), itemModel.writer);
+        val backpackOpenModel = ModMain.of("backpack_opened");
+
+        ItemModelHelper.item(ModItems.BACKPACK)
+            .parent("generated")
+            .overrides(listOf(
+                mapOf(
+                    BackpackItem.OPEN_PREDICATE to 1
+                ) to backpackOpenModel
+            ))
+            .textures(mapOf(
+                TextureKey.LAYER0 to ModMain.of("backpack"),
+                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
+            ))
+            .upload(itemModel.writer);
+
+        ItemModelHelper.item(ModItems.BACKPACK)
+            .parent("generated")
+            .textures(mapOf(
+                TextureKey.LAYER0 to ModMain.of("backpack_opened"),
+                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
+            ))
+            .upload(itemModel.writer, backpackOpenModel);
     }
 }

@@ -13,9 +13,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 
-object ModItems {
-    fun load() {}
-
+object ModItems : IModInit {
     fun <T : Item> register(path: String, item: T, group: RegistryKey<ItemGroup>? = null): T {
         val ret = Registry.register(Registries.ITEM, ModMain.of(path), item);
         group?.let { ItemGroupEvents.modifyEntriesEvent(it).register { entries -> entries.add(ret) } }

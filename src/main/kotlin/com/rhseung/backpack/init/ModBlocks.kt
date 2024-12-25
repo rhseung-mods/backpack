@@ -15,9 +15,7 @@ import net.minecraft.registry.Registry
 import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 
-object ModBlocks {
-    fun load() {}
-
+object ModBlocks : IModInit {
     fun <T: Block> register(path: String, block: T, group: RegistryKey<ItemGroup>? = null): T {
         val id = ModMain.of(path);
         val registryKey = RegistryKey.of(RegistryKeys.ITEM, id);

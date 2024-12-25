@@ -2,10 +2,10 @@
   "parent": "minecraft:item/generated",
   "overrides": [
     {
+      "model": "backpack:item/backpack_opened",
       "predicate": {
-        "open": 1
-      },
-      "model": "backpack:item/open_backpack"
+        "backpack:open": 1
+      }
     }
   ],
   "textures": {

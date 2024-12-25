@@ -9,9 +9,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.Util
 
-object ModBlockEntityTypes {
-    fun load() {}
-
+object ModBlockEntityTypes : IModInit {
     fun <T : BlockEntity> register(id: String, blockEntityType: BlockEntityType<T>): BlockEntityType<T> {
         Util.getChoiceType(TypeReferences.BLOCK_ENTITY, id);
         return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, blockEntityType);
