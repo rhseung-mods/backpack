@@ -26,15 +26,24 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
         );
     }
 
-    override fun generateItemModels(itemModel: ItemModelGenerator) {
-        val backpackOpenModel = ModMain.of("backpack_opened");
+    private fun backpackOpened(item: BackpackItem): ItemModelHelper.ItemModelBuilder {
+        return ItemModelHelper.itemModel("_opened")
+            .item(item)
+            .parent("generated")
+            .textures(mapOf(
+                TextureKey.LAYER0 to ModMain.of("backpack_opened"),
+                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
+            ));
+    }
 
-        ItemModelHelper.item(ModItems.BACKPACK)
+    override fun generateItemModels(itemModel: ItemModelGenerator) {
+        ItemModelHelper.itemModel()
+            .item(ModItems.BACKPACK)
             .parent("generated")
             .overrides(listOf(
                 mapOf(
-                    BackpackItem.OPEN_PREDICATE to 1
-                ) to backpackOpenModel
+                    BackpackItem.PREDICATE_OPEN to 1
+                ) to backpackOpened(ModItems.BACKPACK)
             ))
             .textures(mapOf(
                 TextureKey.LAYER0 to ModMain.of("backpack"),
@@ -42,12 +51,18 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
             ))
             .upload(itemModel.writer);
 
-        ItemModelHelper.item(ModItems.BACKPACK)
+        ItemModelHelper.itemModel()
+            .item(ModItems.LARGE_BACKPACK)
             .parent("generated")
+            .overrides(listOf(
+                mapOf(
+                    BackpackItem.PREDICATE_OPEN to 1
+                ) to backpackOpened(ModItems.LARGE_BACKPACK)
+            ))
             .textures(mapOf(
-                TextureKey.LAYER0 to ModMain.of("backpack_opened"),
+                TextureKey.LAYER0 to ModMain.of("backpack"),
                 TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
             ))
-            .upload(itemModel.writer, backpackOpenModel);
+            .upload(itemModel.writer);
     }
 }

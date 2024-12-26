@@ -1,5 +1,8 @@
 {
   "block.backpack.crate": "Crate",
   "container.backpack": "Backpack",
-  "item.backpack.backpack": "Backpack"
+  "item.backpack.backpack": "Backpack",
+  "item.backpack.large_backpack": "Large Backpack",
+  "key.backpack.open": "Open Backpack",
+  "key.category.backpack.backpack": "Backpack"
 }

@@ -19,8 +19,8 @@ public class ClientPlayerEntityMixin {
         var player = (ClientPlayerEntity) (Object) this;
         var handStack = player.getStackInHand(Hand.MAIN_HAND);
 
-        if (handStack.getItem() instanceof BackpackItem backpackItem && player.currentScreenHandler instanceof GenericContainerScreenHandler) {
-            backpackItem.onCloseScreen(player, handStack);
+        if (handStack.getItem() instanceof BackpackItem && player.currentScreenHandler instanceof GenericContainerScreenHandler) {
+            BackpackItem.Companion.onCloseScreen(player, handStack);
         }
     }
 }

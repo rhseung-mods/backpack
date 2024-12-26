@@ -24,5 +24,8 @@ object ModItems : IModInit {
         return settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, ModMain.of(id)));
     }
 
-    val BACKPACK = register("backpack", BackpackItem(BackpackSize.`9X3`, ofSetting("backpack")), ItemGroups.TOOLS);
+    val BACKPACK = register("backpack",
+        BackpackItem(BackpackSize.`9X3`, ofSetting("backpack")), ItemGroups.TOOLS);
+    val LARGE_BACKPACK = register("large_backpack",
+        BackpackItem(BackpackSize.`9X4`, ofSetting("large_backpack")), ItemGroups.TOOLS);
 }

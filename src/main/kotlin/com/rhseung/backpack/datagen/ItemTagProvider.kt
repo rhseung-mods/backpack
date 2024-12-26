@@ -16,6 +16,8 @@ class ItemTagProvider(
 
     override fun configure(lookUp: RegistryWrapper.WrapperLookup) {
         getOrCreateTagBuilder(ItemTags.DYEABLE)
-            .add(ModItems.BACKPACK);
+            .add(ModItems.BACKPACK)
+            .add(ModItems.LARGE_BACKPACK)
+        ;
     }
 }

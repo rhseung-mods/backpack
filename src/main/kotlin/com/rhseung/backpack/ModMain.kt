@@ -4,6 +4,7 @@ import com.rhseung.backpack.init.ModBlockEntityTypes
 import com.rhseung.backpack.init.ModBlocks
 import com.rhseung.backpack.init.ModComponents
 import com.rhseung.backpack.init.ModItems
+import com.rhseung.backpack.init.ModPayloadsC2S
 import com.rhseung.backpack.init.ModRecipeSerializers
 import com.rhseung.backpack.init.ModScreenHandlerTypes
 import com.rhseung.backpack.init.ModSounds
@@ -23,6 +24,7 @@ object ModMain : ModInitializer {
 		ModBlocks.load();
 		ModComponents.load();
 		ModItems.load();
+		ModPayloadsC2S.load();
 		ModRecipeSerializers.load();
 		ModScreenHandlerTypes.load();
 		ModSounds.load();
