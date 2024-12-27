@@ -8,14 +8,13 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
-import net.minecraft.util.Hand
 
-class BackpackOpenPayload : CustomPayload {
-    companion object : ServerPlayNetworking.PlayPayloadHandler<BackpackOpenPayload> {
-        val ID = CustomPayload.Id<BackpackOpenPayload>(ModMain.of("backpack_open"));
-        val CODEC = PacketCodecs.codec(Codec.unit(BackpackOpenPayload()));
+class BackpackOpenKeyPayload : CustomPayload {
+    companion object : ServerPlayNetworking.PlayPayloadHandler<BackpackOpenKeyPayload> {
+        val PACKET_ID = CustomPayload.Id<BackpackOpenKeyPayload>(ModMain.of("backpack_open"));
+        val PACKET_CODEC = PacketCodecs.codec(Codec.unit(BackpackOpenKeyPayload()));
 
-        override fun receive(payload: BackpackOpenPayload, ctx: ServerPlayNetworking.Context) {
+        override fun receive(payload: BackpackOpenKeyPayload, ctx: ServerPlayNetworking.Context) {
             val backpack = ctx.player().getEquippedStack(EquipmentSlot.CHEST);
             val item = backpack.item;
 
@@ -25,12 +24,12 @@ class BackpackOpenPayload : CustomPayload {
         }
 
         fun register() {
-            PayloadTypeRegistry.playC2S().register(ID, CODEC);
-            ServerPlayNetworking.registerGlobalReceiver(ID, BackpackOpenPayload::receive);
+            PayloadTypeRegistry.playC2S().register(PACKET_ID, PACKET_CODEC);
+            ServerPlayNetworking.registerGlobalReceiver(PACKET_ID, BackpackOpenKeyPayload::receive);
         }
     }
 
-    override fun getId(): CustomPayload.Id<BackpackOpenPayload> {
-        return ID;
+    override fun getId(): CustomPayload.Id<BackpackOpenKeyPayload> {
+        return PACKET_ID;
     }
 }

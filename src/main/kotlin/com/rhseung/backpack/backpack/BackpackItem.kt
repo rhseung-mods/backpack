@@ -2,10 +2,12 @@ package com.rhseung.backpack.backpack
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModSounds
+import com.rhseung.backpack.network.BackpackScreenPayload
 import com.rhseung.backpack.util.Utils.toInt
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.client.network.ClientPlayerEntity
@@ -73,7 +75,7 @@ class BackpackItem(
 
             // TODO: f 키로 스왑한다던가 등 문제가 있어서 왼손으로 열리는 것을 막음. 나중에 수정할 것
 
-            player.openHandledScreen(object : NamedScreenHandlerFactory {
+            player.openHandledScreen(object : ExtendedScreenHandlerFactory<BackpackScreenPayload> {
                 override fun createMenu(
                     syncId: Int,
                     playerInventory: PlayerInventory,
@@ -89,6 +91,10 @@ class BackpackItem(
 
                 override fun getDisplayName(): Text {
                     return Text.translatable(SCREEN_NAME);
+                }
+
+                override fun getScreenOpeningData(player: ServerPlayerEntity): BackpackScreenPayload {
+                    return BackpackScreenPayload(backpack);
                 }
             });
         }
