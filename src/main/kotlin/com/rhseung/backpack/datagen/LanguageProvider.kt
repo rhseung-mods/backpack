@@ -21,6 +21,5 @@ class LanguageProvider(
 
         translationBuilder.add(BackpackItem.KEY_OPEN, "Open Backpack");
         translationBuilder.add(BackpackItem.KEY_CATEGORY, "Backpack");
-        translationBuilder.add(BackpackItem.SCREEN_NAME, "Backpack");
     }
 }

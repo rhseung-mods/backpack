@@ -19,7 +19,7 @@ class BackpackOpenKeyPayload : CustomPayload {
             val item = backpack.item;
 
             if (item is BackpackItem) {
-                BackpackItem.openScreen(ctx.player().serverWorld, ctx.player(), backpack, -1);
+                BackpackItem.openScreen(ctx.player(), backpack);
             }
         }
 

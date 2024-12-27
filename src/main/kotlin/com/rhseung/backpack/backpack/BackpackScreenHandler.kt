@@ -1,69 +1,95 @@
 package com.rhseung.backpack.backpack
 
-import com.rhseung.backpack.util.Utils
+import com.rhseung.backpack.init.ModScreenHandlerTypesClient
+import com.rhseung.backpack.network.BackpackScreenPayload
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
-import net.minecraft.screen.GenericContainerScreenHandler
-import net.minecraft.screen.Property
-import net.minecraft.screen.PropertyDelegate
-import net.minecraft.screen.slot.SlotActionType
+import net.minecraft.item.ItemStack
+import net.minecraft.screen.ScreenHandler
 
 class BackpackScreenHandler(
-    val size: BackpackSize,
     syncId: Int,
-    playerInventory: PlayerInventory,
-    inventory: BackpackInventory,
-    /**
-     * @see <a href="https://wiki.fabricmc.net/tutorial:propertydelegates">
-     */
-    val openedBy: BackpackData = BackpackData()
-) : GenericContainerScreenHandler(size.toScreenHandlerType(), syncId, playerInventory, inventory, size.row) {
+    val playerInventory: PlayerInventory,
+    val backpackInventory: BackpackInventory,
+    val backpackStack: ItemStack
+) : ScreenHandler(ModScreenHandlerTypesClient.BACKPACK_SCREEN_HANDLER, syncId) {
+
+    val size = (this.backpackStack.item as BackpackItem).size;
+
+    constructor(syncId: Int, playerInventory: PlayerInventory, backpackStack: ItemStack) :
+        this(syncId, playerInventory, BackpackInventory(backpackStack), backpackStack);
+
+    constructor(syncId: Int, playerInventory: PlayerInventory, backpackScreenPayload: BackpackScreenPayload) :
+        this(syncId, playerInventory, backpackScreenPayload.stack);
 
     init {
-        this.addProperties(openedBy);
+        val backpack = this.backpackStack.item;
+
+        if (backpack !is BackpackItem) {
+            this.onClosed(playerInventory.player);
+        }
+        else {
+            val size = backpack.size;
+
+            this.backpackInventory.onOpen(playerInventory.player);
+            this.addInventorySlots(this.backpackInventory, size, 8, 18);
+            this.addPlayerSlots(this.playerInventory, 8, 18 + size.row * 18 + 13);
+            this.backpackInventory.update();
+        }
     }
 
-    constructor(size: BackpackSize, syncId: Int, playerInventory: PlayerInventory) : this(size, syncId, playerInventory,
-        BackpackInventory(size, playerInventory.player, BackpackData())
-    );
-
-    constructor(size: BackpackSize, syncId: Int, playerInventory: PlayerInventory, openedBy: BackpackData) : this(size, syncId, playerInventory,
-        BackpackInventory(size, playerInventory.player, openedBy),
-        openedBy
-    );
-
-    companion object {
-        fun create9x1(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X1`, syncId, playerInventory);
-
-        fun create9x2(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X2`, syncId, playerInventory);
-
-        fun create9x3(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X3`, syncId, playerInventory);
-
-        fun create9x4(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X4`, syncId, playerInventory);
-
-        fun create9x5(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X5`, syncId, playerInventory);
-
-        fun create9x6(syncId: Int, playerInventory: PlayerInventory) =
-            BackpackScreenHandler(BackpackSize.`9X6`, syncId, playerInventory);
+    fun addInventorySlots(inventory: BackpackInventory, size: BackpackSize, left: Int, top: Int) {
+        for (i in 0..<size.row) {
+            for (j in 0..<9) {
+                this.addSlot(BackpackSlot(backpackStack, inventory, j + i * 9, left + j * 18, top + i * 18));
+            }
+        }
     }
 
     override fun addPlayerHotbarSlots(playerInventory: Inventory, left: Int, y: Int) {
         for (i in 0..<9) {
-            this.addSlot(BackpackSlot(this, playerInventory, i, left + i * 18, y));
+            this.addSlot(BackpackSlot(backpackStack, playerInventory, i, left + i * 18, y));
         }
     }
 
     override fun addPlayerInventorySlots(playerInventory: Inventory, left: Int, top: Int) {
         for (i in 0..<3) {
             for (j in 0..<9) {
-                this.addSlot(BackpackSlot(this, playerInventory, j + (i + 1) * 9, left + j * 18, top + i * 18));
+                this.addSlot(BackpackSlot(backpackStack, playerInventory, j + (i + 1) * 9, left + j * 18, top + i * 18));
             }
         }
     }
+
+    override fun quickMove(player: PlayerEntity, slotIndex: Int): ItemStack {
+        val slot = this.slots[slotIndex];
+
+        if (slot.hasStack()) {
+            val stack = slot.stack;
+            val size = this.size;
+
+            if (slotIndex < size.row * 9) {
+                if (!this.insertItem(stack, size.row * 9, this.slots.size, true)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!this.insertItem(stack, 0, size.row * 9, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (stack.isEmpty)
+                slot.stack = ItemStack.EMPTY;
+            else
+                slot.markDirty();
+
+            return stack;
+        }
+        else
+            return ItemStack.EMPTY;
+    }
+
+    override fun canUse(player: PlayerEntity): Boolean {
+        return this.backpackInventory.canPlayerUse(player);
+    };
+
 }

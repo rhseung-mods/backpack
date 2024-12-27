@@ -1,6 +1,7 @@
 package com.rhseung.backpack.mixin;
 
 import com.rhseung.backpack.backpack.BackpackItem;
+import com.rhseung.backpack.backpack.BackpackScreenHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.util.Hand;
@@ -17,10 +18,9 @@ public class ClientPlayerEntityMixin {
     )
     public void closeHandledScreenMixin(CallbackInfo ci) {
         var player = (ClientPlayerEntity) (Object) this;
-        var handStack = player.getStackInHand(Hand.MAIN_HAND);
 
-        if (handStack.getItem() instanceof BackpackItem && player.currentScreenHandler instanceof GenericContainerScreenHandler) {
-            BackpackItem.Companion.onCloseScreen(player, handStack);
+        if (player.currentScreenHandler instanceof BackpackScreenHandler backpackScreenHandler) {
+            BackpackItem.Companion.playCloseSound(player, backpackScreenHandler.getBackpackStack());
         }
     }
 }

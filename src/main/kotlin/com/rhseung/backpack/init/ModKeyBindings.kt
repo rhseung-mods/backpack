@@ -20,7 +20,7 @@ object ModKeyBindings : IModInit {
     override fun load() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             if (backpackOpenKey.wasPressed() && client.player != null) {
-                BackpackItem.onOpenScreen(client.player!!);
+                BackpackItem.playOpenSound(client.player!!);
                 ClientPlayNetworking.send(BackpackOpenKeyPayload());
             }
         };

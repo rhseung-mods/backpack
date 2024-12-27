@@ -7,6 +7,7 @@ import com.rhseung.backpack.util.Utils.toInt
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
+import net.fabricmc.fabric.api.item.v1.FabricItem
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -19,10 +20,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
@@ -47,7 +46,6 @@ class BackpackItem(
         val PREDICATE_OPEN: Identifier = ModMain.of("open");
         const val KEY_OPEN = "key.${ModMain.MOD_ID}.open";
         const val KEY_CATEGORY = "key.category.${ModMain.MOD_ID}.backpack";
-        const val SCREEN_NAME = "container.backpack";
 
         @Environment(EnvType.CLIENT)
         fun onClient(item: BackpackItem) {
@@ -60,9 +58,7 @@ class BackpackItem(
                     return@register 0f;
 
                 val backpackScreenHandler = entity.currentScreenHandler as BackpackScreenHandler;
-                val backpack = backpackScreenHandler.openedBy.getStack(entity);
-
-                return@register ItemStack.areEqual(stack, backpack).toInt().toFloat();
+                return@register ItemStack.areEqual(stack, backpackScreenHandler.backpackStack).toInt().toFloat();
             }
 
             ColorProviderRegistry.ITEM.register(ItemColorProvider { stack, tintIndex ->
@@ -70,27 +66,18 @@ class BackpackItem(
             }, item);
         }
 
-        fun openScreen(world: ServerWorld, player: ServerPlayerEntity, backpack: ItemStack, index: Int, hand: Hand = Hand.MAIN_HAND) {
+        fun openScreen(player: ServerPlayerEntity, backpack: ItemStack) {
             require(backpack.item is BackpackItem) { "ItemStack($backpack) is not a backpack" };
 
             // TODO: f 키로 스왑한다던가 등 문제가 있어서 왼손으로 열리는 것을 막음. 나중에 수정할 것
 
             player.openHandledScreen(object : ExtendedScreenHandlerFactory<BackpackScreenPayload> {
-                override fun createMenu(
-                    syncId: Int,
-                    playerInventory: PlayerInventory,
-                    player: PlayerEntity
-                ): ScreenHandler {
-                    return BackpackScreenHandler(
-                        (backpack.item as BackpackItem).size,
-                        syncId,
-                        playerInventory,
-                        BackpackData(index, hand)
-                    );
+                override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
+                    return BackpackScreenHandler(syncId, playerInventory, backpack);
                 }
 
                 override fun getDisplayName(): Text {
-                    return Text.translatable(SCREEN_NAME);
+                    return Text.translatable(backpack.item.translationKey);
                 }
 
                 override fun getScreenOpeningData(player: ServerPlayerEntity): BackpackScreenPayload {
@@ -99,26 +86,12 @@ class BackpackItem(
             });
         }
 
-        fun onCloseScreen(player: ClientPlayerEntity, backpack: ItemStack) {
-            player.world.playSound(
-                player,
-                player.blockPos,
-                ModSounds.CLOSE_BACKPACK.value(),
-                SoundCategory.PLAYERS,
-                1f,
-                1f
-            );
+        fun playCloseSound(player: ClientPlayerEntity, backpack: ItemStack) {
+            player.world.playSound(player, player.blockPos, ModSounds.CLOSE_BACKPACK.value(), SoundCategory.PLAYERS, 1f, 1f);
         }
 
-        fun onOpenScreen(player: ClientPlayerEntity) {
-            player.world.playSound(
-                player,
-                player.blockPos,
-                ModSounds.OPEN_BACKPACK.value(),
-                SoundCategory.PLAYERS,
-                1f,
-                1f
-            );
+        fun playOpenSound(player: ClientPlayerEntity) {
+            player.world.playSound(player, player.blockPos, ModSounds.OPEN_BACKPACK.value(), SoundCategory.PLAYERS, 1f, 1f);
         }
     }
 
@@ -127,21 +100,15 @@ class BackpackItem(
      */
     override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
         val stack = user.getStackInHand(hand);
+        user.setCurrentHand(hand);
 
         if (world.isClient) {
-            BackpackItem.onOpenScreen(user as ClientPlayerEntity);
-            return ActionResult.CONSUME;
+            BackpackItem.playOpenSound(user as ClientPlayerEntity);
+            return ActionResult.CONSUME.withNewHandStack(stack);
         }
         else {
-            user.setCurrentHand(hand);
-            BackpackItem.openScreen(
-                world as ServerWorld,
-                user as ServerPlayerEntity,
-                stack,
-                user.inventory.selectedSlot,
-                hand
-            );
-            return ActionResult.SUCCESS_SERVER;
+            BackpackItem.openScreen(user as ServerPlayerEntity, stack);
+            return ActionResult.SUCCESS_SERVER.withNewHandStack(stack);
         }
     }
 }

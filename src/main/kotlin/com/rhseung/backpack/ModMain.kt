@@ -6,7 +6,7 @@ import com.rhseung.backpack.init.ModComponents
 import com.rhseung.backpack.init.ModItems
 import com.rhseung.backpack.init.ModPayloadsC2S
 import com.rhseung.backpack.init.ModRecipeSerializers
-import com.rhseung.backpack.init.ModScreenHandlerTypes
+import com.rhseung.backpack.init.ModScreenHandlerTypesServer
 import com.rhseung.backpack.init.ModSounds
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
@@ -26,7 +26,7 @@ object ModMain : ModInitializer {
 		ModItems.load();
 		ModPayloadsC2S.load();
 		ModRecipeSerializers.load();
-		ModScreenHandlerTypes.load();
+		ModScreenHandlerTypesServer.load();
 		ModSounds.load();
 	}
 }
