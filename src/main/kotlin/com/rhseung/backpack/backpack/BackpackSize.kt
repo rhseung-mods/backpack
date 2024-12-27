@@ -1,14 +1,15 @@
 package com.rhseung.backpack.backpack
 
-enum class BackpackSize(private val size: Int) {
-    `9X1`(9),
-    `9X2`(18),
-    `9X3`(27),
-    `9X4`(36),
-    `9X5`(45),
-    `9X6`(54);
+enum class BackpackSize(val row: Int, val col: Int) {
+    SMALL(3, 3),
+    MEDIUM(4, 3),   // +3
+    LARGE(3, 5),    // +3
+    HUGE(4, 5),     // +5
+    GIGANTIC(4, 7), // +8
+    `9X3`(3, 9),
+    `9X4`(4, 9);
 
-    val row = size / 9;
+    val size = row * col;
 
     fun toInt() = size;
 

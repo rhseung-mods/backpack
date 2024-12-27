@@ -4,6 +4,7 @@ import com.rhseung.backpack.ModMain
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -49,7 +50,8 @@ class BackpackScreen(
             this.backgroundWidth,
             this.rows * 18 + 17,
             256,
-            256
+            256,
+            DyedColorComponent.getColor(handler.backpackStack, -6265536)    // ref: ItemColors, Leather default color
         );
 
         // player inventory gui
