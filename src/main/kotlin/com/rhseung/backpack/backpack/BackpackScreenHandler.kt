@@ -15,7 +15,7 @@ class BackpackScreenHandler(
     val backpackStack: ItemStack
 ) : ScreenHandler(ModScreenHandlerTypesClient.BACKPACK_SCREEN_HANDLER, syncId) {
 
-    val size = (this.backpackStack.item as BackpackItem).size;
+    val backpackType = (this.backpackStack.item as BackpackItem).type;
 
     constructor(syncId: Int, playerInventory: PlayerInventory, backpackStack: ItemStack) :
         this(syncId, playerInventory, BackpackInventory(backpackStack), backpackStack);
@@ -30,19 +30,19 @@ class BackpackScreenHandler(
             this.onClosed(playerInventory.player);
         }
         else {
-            val size = backpack.size;
+            val type = backpack.type;
 
             this.backpackInventory.onOpen(playerInventory.player);
-            this.addInventorySlots(this.backpackInventory, size, 8, 18);
-            this.addPlayerSlots(this.playerInventory, 8, 18 + size.row * 18 + 13);
+            this.addBackpackSlots(this.backpackInventory, type, 8 + type.playerInventoryU, 10 + type.playerInventoryV);
+            this.addPlayerSlots(this.playerInventory, 8, 10 + type.playerInventoryV + type.row * 18 + 8);
             this.backpackInventory.update();
         }
     }
 
-    fun addInventorySlots(inventory: BackpackInventory, size: BackpackSize, left: Int, top: Int) {
-        for (i in 0..<size.row) {
-            for (j in 0..<9) {
-                this.addSlot(BackpackSlot(backpackStack, inventory, j + i * 9, left + j * 18, top + i * 18));
+    fun addBackpackSlots(backpackInventory: BackpackInventory, type: BackpackType, left: Int, top: Int) {
+        for (i in 0..<type.row) {
+            for (j in 0..<type.col) {
+                this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * type.col, left + j * 18, top + i * 18));
             }
         }
     }
@@ -66,7 +66,7 @@ class BackpackScreenHandler(
 
         if (slot.hasStack()) {
             val stack = slot.stack;
-            val size = this.size;
+            val size = this.backpackType;
 
             if (slotIndex < size.row * 9) {
                 if (!this.insertItem(stack, size.row * 9, this.slots.size, true)) {
@@ -91,5 +91,10 @@ class BackpackScreenHandler(
     override fun canUse(player: PlayerEntity): Boolean {
         return this.backpackInventory.canPlayerUse(player);
     };
+
+    override fun onClosed(player: PlayerEntity) {
+        super.onClosed(player);
+        this.backpackInventory.onClose(player);
+    }
 
 }

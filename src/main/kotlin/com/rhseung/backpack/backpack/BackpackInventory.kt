@@ -2,13 +2,12 @@ package com.rhseung.backpack.backpack
 
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ContainerComponent
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 
 class BackpackInventory(
     val backpackStack: ItemStack
-) : SimpleInventory((backpackStack.item as BackpackItem).size.toInt()) {
+) : SimpleInventory((backpackStack.item as BackpackItem).type.toInt()) {
 
     val containerComponent: ContainerComponent = backpackStack
         .getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);

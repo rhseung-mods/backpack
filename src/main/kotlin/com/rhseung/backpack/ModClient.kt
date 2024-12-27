@@ -15,8 +15,11 @@ object ModClient : ClientModInitializer {
         ModPayloadsS2C.load();
         ModScreenHandlerTypesClient.load();
 
-        BackpackItem.onClient(ModItems.BACKPACK);
+        BackpackItem.onClient(ModItems.SMALL_BACKPACK);
+        BackpackItem.onClient(ModItems.MEDIUM_BACKPACK);
         BackpackItem.onClient(ModItems.LARGE_BACKPACK);
+        BackpackItem.onClient(ModItems.HUGE_BACKPACK);
+        BackpackItem.onClient(ModItems.GIGANTIC_BACKPACK);
 
 //        EntityModelLayerRegistry.registerModelLayer {  }
 

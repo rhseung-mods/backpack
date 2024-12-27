@@ -1,7 +1,10 @@
 {
   "block.backpack.crate": "Crate",
-  "item.backpack.backpack": "Backpack",
+  "item.backpack.gigantic_backpack": "Gigantic Backpack",
+  "item.backpack.huge_backpack": "Huge Backpack",
   "item.backpack.large_backpack": "Large Backpack",
+  "item.backpack.medium_backpack": "Medium Backpack",
+  "item.backpack.small_backpack": "Small Backpack",
   "key.backpack.open": "Open Backpack",
   "key.category.backpack.backpack": "Backpack"
 }

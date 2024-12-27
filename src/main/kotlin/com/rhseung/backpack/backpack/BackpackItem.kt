@@ -7,7 +7,6 @@ import com.rhseung.backpack.util.Utils.toInt
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
-import net.fabricmc.fabric.api.item.v1.FabricItem
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -30,7 +29,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 
 class BackpackItem(
-    val size: BackpackSize,
+    val type: BackpackType,
     settings: Settings
 ) : Item(settings
     .maxCount(1)

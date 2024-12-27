@@ -36,33 +36,26 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
             ));
     }
 
-    override fun generateItemModels(itemModel: ItemModelGenerator) {
-        ItemModelHelper.itemModel()
-            .item(ModItems.BACKPACK)
+    fun backpack(item: BackpackItem): ItemModelHelper.ItemModelBuilder {
+        return ItemModelHelper.itemModel()
+            .item(item)
             .parent("generated")
             .overrides(listOf(
                 mapOf(
                     BackpackItem.PREDICATE_OPEN to 1
-                ) to backpackOpened(ModItems.BACKPACK)
+                ) to backpackOpened(item)
             ))
             .textures(mapOf(
                 TextureKey.LAYER0 to ModMain.of("backpack"),
                 TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
-            ))
-            .upload(itemModel.writer);
+            ));
+    }
 
-        ItemModelHelper.itemModel()
-            .item(ModItems.LARGE_BACKPACK)
-            .parent("generated")
-            .overrides(listOf(
-                mapOf(
-                    BackpackItem.PREDICATE_OPEN to 1
-                ) to backpackOpened(ModItems.LARGE_BACKPACK)
-            ))
-            .textures(mapOf(
-                TextureKey.LAYER0 to ModMain.of("backpack"),
-                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
-            ))
-            .upload(itemModel.writer);
+    override fun generateItemModels(itemModel: ItemModelGenerator) {
+        backpack(ModItems.SMALL_BACKPACK).upload(itemModel.writer);
+        backpack(ModItems.MEDIUM_BACKPACK).upload(itemModel.writer);
+        backpack(ModItems.LARGE_BACKPACK).upload(itemModel.writer);
+        backpack(ModItems.HUGE_BACKPACK).upload(itemModel.writer);
+        backpack(ModItems.GIGANTIC_BACKPACK).upload(itemModel.writer);
     }
 }

@@ -9,7 +9,7 @@ import net.minecraft.screen.slot.Slot
 
 class BackpackSlot(
     val backpackStack: ItemStack,
-    val inventory: Inventory,
+    inventory: Inventory,
     index: Int,
     x: Int,
     y: Int,

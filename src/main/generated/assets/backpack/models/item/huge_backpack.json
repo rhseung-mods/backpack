@@ -2,7 +2,7 @@
   "parent": "minecraft:item/generated",
   "overrides": [
     {
-      "model": "backpack:item/backpack_opened",
+      "model": "backpack:item/huge_backpack_opened",
       "predicate": {
         "backpack:open": 1
       }

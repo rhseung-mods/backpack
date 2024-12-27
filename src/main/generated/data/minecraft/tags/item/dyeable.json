@@ -1,6 +1,9 @@
 {
   "values": [
-    "backpack:backpack",
-    "backpack:large_backpack"
+    "backpack:small_backpack",
+    "backpack:medium_backpack",
+    "backpack:large_backpack",
+    "backpack:huge_backpack",
+    "backpack:gigantic_backpack"
   ]
 }

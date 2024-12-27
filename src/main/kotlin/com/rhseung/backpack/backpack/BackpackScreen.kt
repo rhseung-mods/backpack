@@ -1,13 +1,12 @@
 package com.rhseung.backpack.backpack
 
-import com.rhseung.backpack.ModMain
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
+import net.minecraft.util.math.ColorHelper
 
 class BackpackScreen(
     handler: BackpackScreenHandler,
@@ -15,16 +14,19 @@ class BackpackScreen(
     title: Text
 ) : HandledScreen<BackpackScreenHandler>(handler, playerInventory, title) {
 
-    val rows = handler.size.row;
-
     init {
-        this.backgroundHeight = 114 + rows * 18;
-        this.playerInventoryTitleY = this.backgroundHeight - 94;
+        val type = this.handler.backpackType;
+        this.backgroundHeight = type.textureHeight - type.v;
+        this.backgroundWidth = type.textureWidth;
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
+    }
+
+    override fun drawForeground(context: DrawContext, mouseX: Int, mouseY: Int) {
+        // container title 생략
     }
 
     override fun drawBackground(
@@ -35,37 +37,35 @@ class BackpackScreen(
     ) {
         val i = (this.width - this.backgroundWidth) / 2;
         val j = (this.height - this.backgroundHeight) / 2;
-
-        val backpackInventoryTexture = ModMain.of("textures/gui/container/backpack.png");
-        val playerInventoryTexture = Identifier.ofVanilla("textures/gui/container/generic_54.png");
-
-        // backpack gui
-        context.drawTexture(
-            RenderLayer::getGuiTextured,
-            backpackInventoryTexture,
-            i,
-            j,
-            0f,
-            0f,
-            this.backgroundWidth,
-            this.rows * 18 + 17,
-            256,
-            256,
-            DyedColorComponent.getColor(handler.backpackStack, -6265536)    // ref: ItemColors, Leather default color
-        );
+        val type = this.handler.backpackType;
 
         // player inventory gui
         context.drawTexture(
             RenderLayer::getGuiTextured,
-            playerInventoryTexture,
-            i,
-            j + this.rows * 18 + 17,
-            0f,
-            126f,
+            type.texture,
+            i + type.playerInventoryU,
+            j + type.playerInventoryV,
+            type.playerInventoryU.toFloat(),
+            type.playerInventoryV.toFloat(),
             this.backgroundWidth,
-            96,
-            256,
-            256
+            this.backgroundHeight - type.playerInventoryV,
+            type.textureWidth,
+            type.textureHeight
+        );
+
+        // backpack gui
+        context.drawTexture(
+            RenderLayer::getGuiTextured,
+            type.texture,
+            i + type.u,
+            j + type.v,
+            type.u.toFloat(),
+            type.v.toFloat(),
+            type.width,
+            type.height,
+            type.textureWidth,
+            type.textureHeight,
+            DyedColorComponent.getColor(handler.backpackStack, ColorHelper.fullAlpha(0x825939))
         );
     }
 }
