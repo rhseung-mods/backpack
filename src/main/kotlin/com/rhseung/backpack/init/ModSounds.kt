@@ -19,4 +19,5 @@ object ModSounds : IModInit {
 
     val OPEN_BACKPACK = registerRef("open_backpack");
     val CLOSE_BACKPACK = registerRef("close_backpack");
+    val EQUIP_BACKPACK = registerRef("equip_backpack");
 }

@@ -3,13 +3,11 @@ package com.rhseung.backpack.backpack
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModSounds
 import com.rhseung.backpack.network.BackpackScreenPayload
-import com.rhseung.backpack.util.Utils.toInt
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.client.color.item.ItemColorProvider
-import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.DyedColorComponent
@@ -26,6 +24,8 @@ import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.ColorHelper
+import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 
 class BackpackItem(
@@ -37,7 +37,7 @@ class BackpackItem(
         DataComponentTypes.EQUIPPABLE,
         EquippableComponent
             .builder(EquipmentSlot.CHEST)
-            .equipSound(ModSounds.OPEN_BACKPACK)
+            .equipSound(ModSounds.EQUIP_BACKPACK)
             .build()    // TODO: model도 추가하기
     )
 ) {
@@ -45,23 +45,24 @@ class BackpackItem(
         val PREDICATE_OPEN: Identifier = ModMain.of("open");
         const val KEY_OPEN = "key.${ModMain.MOD_ID}.open";
         const val KEY_CATEGORY = "key.category.${ModMain.MOD_ID}.backpack";
+        val ITEM_BAR_COLOR = ColorHelper.fromFloats(1.0F, 0.44F, 0.53F, 1.0F);
+        val ITEM_BAR_COLOR_FULL = ColorHelper.fromFloats(1.0F, 1.0F, 0.33F, 0.33F);
+        val COLOR_DEFAULT = ColorHelper.fullAlpha(0x825939);
 
         @Environment(EnvType.CLIENT)
         fun onClient(item: BackpackItem) {
-            ModelPredicateProviderRegistry.register(item, BackpackItem.PREDICATE_OPEN) { stack, world, entity, seed ->
-                if (entity !is PlayerEntity)
-                    return@register 0f;
-                else if (stack.item !is BackpackItem)
-                    return@register 0f;
-                else if (entity.currentScreenHandler !is BackpackScreenHandler)
-                    return@register 0f;
-
-                val backpackScreenHandler = entity.currentScreenHandler as BackpackScreenHandler;
-                return@register ItemStack.areEqual(stack, backpackScreenHandler.backpackStack).toInt().toFloat();
-            }
+//            ModelPredicateProviderRegistry.register(item, BackpackItem.PREDICATE_OPEN) { stack, world, entity, seed ->
+//                if (entity !is PlayerEntity)
+//                    return@register 0f;
+//                else if (entity.currentScreenHandler !is BackpackScreenHandler)
+//                    return@register 0f;
+//
+//                val backpackScreenHandler = entity.currentScreenHandler as BackpackScreenHandler;
+//                return@register ItemStack.areEqual(stack, backpackScreenHandler.backpackStack).toInt().toFloat();
+//            }
 
             ColorProviderRegistry.ITEM.register(ItemColorProvider { stack, tintIndex ->
-                if (tintIndex == 1) DyedColorComponent.getColor(stack, 0) else -1
+                if (tintIndex == 0) DyedColorComponent.getColor(stack, COLOR_DEFAULT) else -1
             }, item);
         }
 
@@ -109,5 +110,24 @@ class BackpackItem(
             BackpackItem.openScreen(user as ServerPlayerEntity, stack);
             return ActionResult.SUCCESS_SERVER.withNewHandStack(stack);
         }
+    }
+
+    fun getInventory(stack: ItemStack): BackpackInventory {
+        return BackpackInventory(stack);
+    }
+
+    override fun isItemBarVisible(stack: ItemStack): Boolean {
+        val inventory = getInventory(stack);
+        return !inventory.isEmpty;
+    }
+
+    override fun getItemBarColor(stack: ItemStack): Int {
+        val inventory = getInventory(stack);
+        return if (inventory.isFull) ITEM_BAR_COLOR_FULL else ITEM_BAR_COLOR;
+    }
+
+    override fun getItemBarStep(stack: ItemStack): Int {
+        val inventory = getInventory(stack);
+        return (1 + MathHelper.multiplyFraction(inventory.occupancy, 12)).coerceAtMost(13);
     }
 }

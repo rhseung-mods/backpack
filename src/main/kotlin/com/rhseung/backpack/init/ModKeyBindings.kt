@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
+import net.minecraft.entity.EquipmentSlot
 import org.lwjgl.glfw.GLFW
 
 object ModKeyBindings : IModInit {
@@ -20,8 +21,11 @@ object ModKeyBindings : IModInit {
     override fun load() {
         ClientTickEvents.END_CLIENT_TICK.register { client ->
             if (backpackOpenKey.wasPressed() && client.player != null) {
-                BackpackItem.playOpenSound(client.player!!);
-                ClientPlayNetworking.send(BackpackOpenKeyPayload());
+                val stack = client.player!!.getEquippedStack(EquipmentSlot.CHEST);
+                if (stack.item is BackpackItem) {
+                    BackpackItem.playOpenSound(client.player!!);
+                    ClientPlayNetworking.send(BackpackOpenKeyPayload());
+                }
             }
         };
     }

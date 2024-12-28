@@ -23,7 +23,8 @@ enum class BackpackType(
     val size = row * col;
     val texture: Identifier = ModMain.of("textures/gui/container/$screenTexture.png");
     val textureWidth = 176;
-    val textureHeight = 200;
+    val textureHeight = 115;
+    val playerInventoryHeight = 92;
     val playerInventoryU = 0;
     val playerInventoryV = 108;
 

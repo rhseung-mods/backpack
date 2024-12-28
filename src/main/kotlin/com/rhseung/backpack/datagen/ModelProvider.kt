@@ -40,14 +40,14 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
         return ItemModelHelper.itemModel()
             .item(item)
             .parent("generated")
-            .overrides(listOf(
-                mapOf(
-                    BackpackItem.PREDICATE_OPEN to 1
-                ) to backpackOpened(item)
-            ))
+//            .overrides(listOf(
+//                mapOf(
+//                    BackpackItem.PREDICATE_OPEN to 1
+//                ) to backpackOpened(item)
+//            ))
             .textures(mapOf(
                 TextureKey.LAYER0 to ModMain.of("backpack"),
-                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
+                TextureKey.LAYER1 to ModMain.of("backpack_cover_${item.type.ordinal}")
             ));
     }
 

@@ -1,5 +1,6 @@
 package com.rhseung.backpack.backpack
 
+import com.rhseung.backpack.ModMain
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.render.RenderLayer
@@ -16,7 +17,7 @@ class BackpackScreen(
 
     init {
         val type = this.handler.backpackType;
-        this.backgroundHeight = type.textureHeight - type.v;
+        this.backgroundHeight = type.textureHeight - type.v + type.playerInventoryHeight;
         this.backgroundWidth = type.textureWidth;
     }
 
@@ -42,15 +43,15 @@ class BackpackScreen(
         // player inventory gui
         context.drawTexture(
             RenderLayer::getGuiTextured,
-            type.texture,
-            i + type.playerInventoryU,
-            j + type.playerInventoryV,
-            type.playerInventoryU.toFloat(),
-            type.playerInventoryV.toFloat(),
+            ModMain.of("textures/gui/container/player_inventory.png"),
+            i,
+            j + type.playerInventoryV - type.v,
+            0f,
+            0f,
             this.backgroundWidth,
-            this.backgroundHeight - type.playerInventoryV,
+            type.playerInventoryHeight,
             type.textureWidth,
-            type.textureHeight
+            type.playerInventoryHeight
         );
 
         // backpack gui
@@ -58,14 +59,14 @@ class BackpackScreen(
             RenderLayer::getGuiTextured,
             type.texture,
             i + type.u,
-            j + type.v,
+            j,
             type.u.toFloat(),
             type.v.toFloat(),
             type.width,
             type.height,
             type.textureWidth,
             type.textureHeight,
-            DyedColorComponent.getColor(handler.backpackStack, ColorHelper.fullAlpha(0x825939))
+            DyedColorComponent.getColor(handler.backpackStack, BackpackItem.COLOR_DEFAULT)
         );
     }
 }

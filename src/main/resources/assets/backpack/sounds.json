@@ -1,14 +1,20 @@
 {
     "open_backpack": {
-        "subtitle": "Backpack Open",
+        "subtitle": "Open Backpack",
         "sounds": [
-            "backpack:open_backpack"
+            "backpack:open"
         ]
     },
     "close_backpack": {
-        "subtitle": "Backpack Close",
+        "subtitle": "Close Backpack",
         "sounds": [
-            "backpack:close_backpack"
+            "backpack:close"
+        ]
+    },
+    "equip_backpack": {
+        "subtitle": "Equip Backpack",
+        "sounds": [
+            "backpack:equip"
         ]
     }
 }
