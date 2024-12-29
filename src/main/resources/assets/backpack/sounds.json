@@ -16,5 +16,17 @@
         "sounds": [
             "backpack:equip"
         ]
+    },
+    "insert_item": {
+        "subtitle": "Insert Item into Backpack",
+        "sounds": [
+            "backpack:insert"
+        ]
+    },
+    "take_item": {
+        "subtitle": "Take Item from Backpack",
+        "sounds": [
+            "backpack:take"
+        ]
     }
 }

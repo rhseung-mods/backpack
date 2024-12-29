@@ -17,7 +17,15 @@ class BackpackInventory(
         get() = this.heldStacks.size;
 
     val occupancy: Fraction
-        get() = Fraction.getReducedFraction(this.heldStacks.filterNot { it.isEmpty }.size, this.maxSize);
+        get() {
+            var total = Fraction.ZERO;
+            for (stack in this.heldStacks) {
+                total = total.add(Fraction
+                    .getFraction(stack.count, stack.maxCount));
+            }
+
+            return total.divideBy(Fraction.getFraction(this.maxSize, 1));
+        }
 
     val isFull: Boolean
         get() = this.occupancy >= Fraction.ONE;
@@ -47,6 +55,23 @@ class BackpackInventory(
     override fun setStack(slot: Int, stack: ItemStack) {
         super.setStack(slot, stack);
         this.update();
+    }
+
+    override fun addStack(stack: ItemStack): ItemStack {
+        val ret = super.addStack(stack);
+        stack.count = ret.count;
+        this.update();
+
+        return ret;
+    }
+
+    fun removeFirstStack(): ItemStack {
+        val index = this.heldStacks.indexOfFirst { it.isEmpty.not() };
+        if (index == -1) {
+            return ItemStack.EMPTY;
+        }
+
+        return this.removeStack(index);
     }
 
     override fun clear() {

@@ -20,11 +20,11 @@ class BackpackSlot(
     }
 
     override fun canTakeItems(playerEntity: PlayerEntity): Boolean {
-        return !cannotMove(this.stack);
+        return cannotMove(this.stack).not();
     }
 
     // 왼손 스왑(f) 가방 여는 중에 금지
     override fun canInsert(stack: ItemStack): Boolean {
-        return !cannotMove(stack);
+        return cannotMove(stack).not();
     }
 }
