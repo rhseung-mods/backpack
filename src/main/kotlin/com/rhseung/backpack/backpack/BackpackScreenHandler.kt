@@ -33,16 +33,22 @@ class BackpackScreenHandler(
             val type = backpack.type;
 
             this.backpackInventory.onOpen(playerInventory.player);
-            this.addBackpackSlots(this.backpackInventory, type, 8 + type.u, 10);
-            this.addPlayerSlots(this.playerInventory, 8 + type.playerInventoryU, 10 + type.row * 18 + 9);
+            this.addBackpackSlots(this.backpackInventory, type,
+                type.slotStartX + 2 * type.borderThickness,
+                type.slotStartY + 2 * type.borderThickness
+            );
+            this.addPlayerSlots(this.playerInventory,
+                8,
+                type.backpackHeight + 14
+            );
             this.backpackInventory.update();
         }
     }
 
     fun addBackpackSlots(backpackInventory: BackpackInventory, type: BackpackType, left: Int, top: Int) {
         for (i in 0..<type.row) {
-            for (j in 0..<type.col) {
-                this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * type.col, left + j * 18, top + i * 18));
+            for (j in 0..<(type.size - i * 9).coerceAtMost(9)) {
+                this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * 9, left + j * 18, top + i * 18));
             }
         }
     }

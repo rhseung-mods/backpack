@@ -18,6 +18,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.StackReference
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.tooltip.TooltipData
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
@@ -31,6 +32,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
+import java.util.Optional
 
 class BackpackItem(
     val type: BackpackType,
@@ -238,4 +240,8 @@ class BackpackItem(
             return false;
         }
     }
+
+//    override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
+//        return Optional.of(BackpackTooltipComponent.BackpackTooltipData(getInventory(stack)));
+//    }
 }

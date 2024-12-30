@@ -5,30 +5,46 @@ import net.minecraft.util.Identifier
 
 
 enum class BackpackType(
-    val row: Int,
-    val col: Int,
-    screenTexture: String,
-    val u: Int,
-    val v: Int,
-    val width: Int,
-    val height: Int
+    val size: Int
 ) {
-    SMALL(3, 3, "backpack_1", 54, 45, 68, 74),
-    MEDIUM(4, 3, "backpack_2", 54, 27, 68, 92),   // +3
-    LARGE(3, 5, "backpack_3", 36, 45, 104, 74),    // +3
-    HUGE(4, 5, "backpack_4", 36, 27, 104, 92),     // +5
-    GIGANTIC(4, 7, "backpack_5", 18, 27, 140, 92), // +8
+    SMALL(9),
+    MEDIUM(18),
+    LARGE(27),
+    HUGE(36),
+    GIGANTIC(45),
     ;
 
-    val size = row * col;
-    val texture: Identifier = ModMain.of("textures/gui/container/$screenTexture.png");
-    val textureWidth = 176;
-    val textureHeight = 115;
-    val playerInventoryHeight = 92;
-    val playerInventoryU = 0;
-    val playerInventoryV = 108;
+    init { require(size in 1..54) { "Invalid backpack size: $size" } }
 
-    fun toInt() = size;
+    val row = (size / 9f).toInt();
+
+    val texture: Identifier = ModMain.of("textures/gui/container/backpack.png");
+    val textureWidth = 255;
+    val textureHeight = 255;
+
+    val slotStartX = 3 + 3;
+    val slotStartY = 3 + 13;
+
+    val slotU = 175;
+    val slotV = 0;
+    val slotWidth = 18;
+    val slotHeight = 18;
+    val slotBorderU = 176;
+    val slotBorderV = 18;
+    val slotBorderWidth = 20;
+    val slotBorderHeight = 20;
+
+    val borderThickness = 1;
+
+    val backpackU = 0;
+    val backpackV = 0;
+    val backpackWidth = 175;
+    val backpackHeight = slotStartY + 2 * borderThickness + row * slotHeight + 3 + borderThickness + 1
+
+    val playerU = 0;
+    val playerV = 129;
+    val playerWidth = 175;
+    val playerHeight = 97;
 
 //    fun toScreenHandlerType() = when (this) {
 //        `9X1` -> ModScreenHandlerTypes.BACKPACK_9X1
