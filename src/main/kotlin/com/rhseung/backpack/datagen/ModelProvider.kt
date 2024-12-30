@@ -47,7 +47,7 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
 //            ))
             .textures(mapOf(
                 TextureKey.LAYER0 to ModMain.of("backpack"),
-                TextureKey.LAYER1 to ModMain.of("backpack_cover_${item.type.ordinal}")
+                TextureKey.LAYER1 to item.type.backpackCoverTextureId
             ));
     }
 

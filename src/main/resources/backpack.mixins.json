@@ -1,14 +1,15 @@
 {
-    "required": true,
-    "package": "com.rhseung.backpack.mixin",
-    "compatibilityLevel": "JAVA_21",
-    "mixins": [
-        "ClientPlayerEntityMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "client": [
-        "TooltipComponentMixin"
-    ]
+  "required": true,
+  "package": "com.rhseung.backpack.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ClientPlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "DrawContextMixin",
+    "TooltipComponentMixin"
+  ]
 }

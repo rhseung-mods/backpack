@@ -21,7 +21,7 @@ class BackpackScreen(
 ) : HandledScreen<BackpackScreenHandler>(handler, playerInventory, title) {
 
     val type = this.handler.backpackType;
-    val color = DyedColorComponent.getColor(handler.backpackStack, BackpackItem.COLOR_DEFAULT);
+    val color = BackpackItem.getColor(handler.backpackStack);
 
     init {
         this.backgroundHeight = type.backpackHeight + type.playerHeight;
@@ -50,46 +50,29 @@ class BackpackScreen(
         val y0 = (this.height - this.backgroundHeight) / 2;
 
         // backpack background
-        context.drawTexture2(
-            RenderLayer::getGuiTextured,
-            type.backpackTexture,
-            Point(x0, y0),
-            color
-        );
+        type.backpackTexture.draw(context, x0, y0, color);
 
         // backpack slots
         type.loop { i, j ->
             // slot background
-            context.drawTexture2(
-                RenderLayer::getGuiTextured,
-                type.slotTexture,
-                Point(
-                    x0 + type.slotStartX + j * type.slotTexture.width + type.borderThickness,
-                    y0 + type.slotStartY + i * type.slotTexture.height + type.borderThickness,
-                ),
+            type.slotTexture.draw(context,
+                x0 + type.slotStartX + j * type.slotTexture.width + type.borderThickness,
+                y0 + type.slotStartY + i * type.slotTexture.height + type.borderThickness,
                 color
             );
 
             // slot border
-            context.drawTexture2(
-                RenderLayer::getGuiTextured,
-                type.slotBorderTexture,
-                Point(
-                    x0 + type.slotStartX + j * type.slotTexture.width,
-                    y0 + type.slotStartY + i * type.slotTexture.height,
-                ),
+            type.slotBorderTexture.draw(context,
+                x0 + type.slotStartX + j * type.slotTexture.width,
+                y0 + type.slotStartY + i * type.slotTexture.height,
                 color
             );
         };
 
         // player inventory
-        context.drawTexture2(
-            RenderLayer::getGuiTextured,
-            type.playerTexture,
-            Point(
-                x0,
-                y0 + type.backpackTexture.height,
-            )
+        type.playerTexture.draw(context,
+            x0,
+            y0 + type.backpackTexture.height,
         );
     }
 }

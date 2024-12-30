@@ -111,6 +111,10 @@ class BackpackItem(
         fun playTakeSound(player: PlayerEntity) {
             player.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f);
         }
+
+        fun getColor(stack: ItemStack): Int {
+            return DyedColorComponent.getColor(stack, COLOR_DEFAULT);
+        }
     }
 
     /**
@@ -241,7 +245,7 @@ class BackpackItem(
         }
     }
 
-//    override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
-//        return Optional.of(BackpackTooltipComponent.BackpackTooltipData(getInventory(stack)));
-//    }
+    override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
+        return Optional.of(BackpackTooltipComponent.BackpackTooltipData(getInventory(stack)));
+    }
 }
