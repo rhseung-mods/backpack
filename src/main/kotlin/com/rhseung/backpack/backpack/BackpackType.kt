@@ -1,7 +1,7 @@
 package com.rhseung.backpack.backpack
 
 import com.rhseung.backpack.ModMain
-import net.minecraft.util.Identifier
+import com.rhseung.backpack.util.Texture
 
 
 enum class BackpackType(
@@ -18,40 +18,35 @@ enum class BackpackType(
 
     val row = (size / 9f).toInt();
 
-    val texture: Identifier = ModMain.of("textures/gui/container/backpack.png");
-    val textureWidth = 255;
-    val textureHeight = 255;
+    val texture = Texture(ModMain.of("textures/gui/container/backpack.png"), 176, 226);
+    val slotTexture = Texture(ModMain.of("textures/gui/container/slot.png"), 18, 18);
+    val slotBorderTexture = Texture(ModMain.of("textures/gui/container/slot_border.png"), 20, 20);
 
-    val slotStartX = 3 + 3;
+    val pad = 3;
+
+    val slotStartX = 3 + pad;
     val slotStartY = 3 + 13;
-
-    val slotU = 175;
-    val slotV = 0;
-    val slotWidth = 18;
-    val slotHeight = 18;
-    val slotBorderU = 176;
-    val slotBorderV = 18;
-    val slotBorderWidth = 20;
-    val slotBorderHeight = 20;
 
     val borderThickness = 1;
 
     val backpackU = 0;
     val backpackV = 0;
-    val backpackWidth = 175;
-    val backpackHeight = slotStartY + 2 * borderThickness + row * slotHeight + 3 + borderThickness + 1
+    val backpackWidth = texture.textureWidth;
+    val backpackHeight = slotStartY + row * slotTexture.textureHeight + 2 * borderThickness + pad;
 
     val playerU = 0;
     val playerV = 129;
-    val playerWidth = 175;
+    val playerWidth = texture.textureWidth;
     val playerHeight = 97;
 
-//    fun toScreenHandlerType() = when (this) {
-//        `9X1` -> ModScreenHandlerTypes.BACKPACK_9X1
-//        `9X2` -> ModScreenHandlerTypes.BACKPACK_9X2
-//        `9X3` -> ModScreenHandlerTypes.BACKPACK_9X3
-//        `9X4` -> ModScreenHandlerTypes.BACKPACK_9X4
-//        `9X5` -> ModScreenHandlerTypes.BACKPACK_9X5
-//        `9X6` -> ModScreenHandlerTypes.BACKPACK_9X6
-//    }
+    val backpackTexture = texture.part(backpackU, backpackV, backpackWidth, backpackHeight);
+    val playerTexture = texture.part(playerU, playerV, playerWidth, playerHeight);
+
+    fun loop(action: (Int, Int) -> Unit) {
+        for (i in 0..<row) {
+            for (j in 0..<(size - i * 9).coerceAtMost(9)) {
+                action(i, j);
+            }
+        }
+    }
 }

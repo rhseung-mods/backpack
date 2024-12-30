@@ -39,18 +39,16 @@ class BackpackScreenHandler(
             );
             this.addPlayerSlots(this.playerInventory,
                 8,
-                type.backpackHeight + 14
+                type.backpackHeight + 15
             );
             this.backpackInventory.update();
         }
     }
 
     fun addBackpackSlots(backpackInventory: BackpackInventory, type: BackpackType, left: Int, top: Int) {
-        for (i in 0..<type.row) {
-            for (j in 0..<(type.size - i * 9).coerceAtMost(9)) {
-                this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * 9, left + j * 18, top + i * 18));
-            }
-        }
+        type.loop { i, j ->
+            this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * 9, left + j * 18, top + i * 18));
+        };
     }
 
     override fun addPlayerHotbarSlots(playerInventory: Inventory, left: Int, y: Int) {
