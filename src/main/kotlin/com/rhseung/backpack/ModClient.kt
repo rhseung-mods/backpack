@@ -1,7 +1,7 @@
 package com.rhseung.backpack
 
 import com.rhseung.backpack.backpack.BackpackItem
-import com.rhseung.backpack.backpack.BackpackScreen
+import com.rhseung.backpack.backpack.screen.BackpackScreen
 import com.rhseung.backpack.init.ModItems
 import com.rhseung.backpack.init.ModKeyBindings
 import com.rhseung.backpack.init.ModPayloadsS2C

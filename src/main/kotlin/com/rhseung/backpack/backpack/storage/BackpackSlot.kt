@@ -1,10 +1,9 @@
-package com.rhseung.backpack.backpack
+package com.rhseung.backpack.backpack.storage
 
+import com.rhseung.backpack.backpack.BackpackItem
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
-import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.slot.Slot
 
 class BackpackSlot(

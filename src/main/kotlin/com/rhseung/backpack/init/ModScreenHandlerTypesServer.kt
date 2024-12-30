@@ -1,12 +1,6 @@
 package com.rhseung.backpack.init
 
-import com.rhseung.backpack.ModMain
-import com.rhseung.backpack.backpack.BackpackScreenHandler
-import com.rhseung.backpack.network.BackpackScreenPayload
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
-import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.registry.Registries

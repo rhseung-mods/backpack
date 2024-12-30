@@ -1,6 +1,6 @@
 package com.rhseung.backpack.init
 
-import com.rhseung.backpack.backpack.BackpackDyeRecipe
+import com.rhseung.backpack.backpack.recipe.BackpackDyeRecipe
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 

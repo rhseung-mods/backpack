@@ -1,18 +1,11 @@
-package com.rhseung.backpack.backpack
+package com.rhseung.backpack.backpack.screen
 
-import com.rhseung.backpack.ModMain
+import com.rhseung.backpack.backpack.BackpackItem
 import com.rhseung.backpack.util.Color
-import com.rhseung.backpack.util.Texture
-import com.rhseung.backpack.util.Utils.drawGuiTextureColor
-import com.rhseung.backpack.util.Utils.drawTexture2
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.render.RenderLayer
-import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
-import net.minecraft.util.math.ColorHelper
-import java.awt.Point
 
 class BackpackScreen(
     handler: BackpackScreenHandler,
@@ -21,7 +14,7 @@ class BackpackScreen(
 ) : HandledScreen<BackpackScreenHandler>(handler, playerInventory, title) {
 
     val type = this.handler.backpackType;
-    val color = BackpackItem.getColor(handler.backpackStack);
+    val color = BackpackItem.Companion.getColor(handler.backpackStack);
 
     init {
         this.backgroundHeight = type.backpackHeight + type.playerHeight;
@@ -55,14 +48,16 @@ class BackpackScreen(
         // backpack slots
         type.loop { i, j ->
             // slot background
-            type.slotTexture.draw(context,
+            type.slotTexture.draw(
+                context,
                 x0 + type.slotStartX + j * type.slotTexture.width + type.borderThickness,
                 y0 + type.slotStartY + i * type.slotTexture.height + type.borderThickness,
                 color
             );
 
             // slot border
-            type.slotBorderTexture.draw(context,
+            type.slotBorderTexture.draw(
+                context,
                 x0 + type.slotStartX + j * type.slotTexture.width,
                 y0 + type.slotStartY + i * type.slotTexture.height,
                 color

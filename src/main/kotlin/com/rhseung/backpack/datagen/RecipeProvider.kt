@@ -1,6 +1,6 @@
 package com.rhseung.backpack.datagen
 
-import com.rhseung.backpack.backpack.BackpackDyeRecipe
+import com.rhseung.backpack.backpack.recipe.BackpackDyeRecipe
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
 import net.minecraft.data.server.recipe.ComplexRecipeJsonBuilder
@@ -8,7 +8,6 @@ import net.minecraft.data.server.recipe.RecipeExporter
 import net.minecraft.data.server.recipe.RecipeGenerator
 import net.minecraft.registry.RegistryWrapper
 import java.util.concurrent.CompletableFuture
-import kotlin.math.exp
 
 class RecipeProvider(
     output: FabricDataOutput,

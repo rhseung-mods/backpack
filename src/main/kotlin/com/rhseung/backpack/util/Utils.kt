@@ -1,14 +1,7 @@
 package com.rhseung.backpack.util
 
-import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.texture.GuiAtlasManager
-import net.minecraft.client.texture.Scaling.Stretch
-import net.minecraft.util.Identifier
-import java.awt.Point
 import java.lang.reflect.Field
 import java.lang.reflect.Method
-import java.util.function.Function
 
 object Utils {
     fun Boolean.toInt() = if (this) 1 else 0;
@@ -106,81 +99,5 @@ object Utils {
 
     fun <T> Any.invokeMethod(methodName: String, vararg args: Any?): T {
         return invoke(this, methodName, *args)
-    }
-
-    fun DrawContext.drawGuiTextureColor(
-        renderLayers: Function<Identifier, RenderLayer>,
-        sprite: Identifier,
-        textureWidth: Int,
-        textureHeight: Int,
-        u: Int,
-        v: Int,
-        x: Int,
-        y: Int,
-        width: Int,
-        height: Int,
-        color: Int
-    ) {
-        val guiAtlasManager = this.getProperty<GuiAtlasManager>("guiAtlasManager");
-        val sprite2 = guiAtlasManager.getSprite(sprite);
-        val scaling = guiAtlasManager.getScaling(sprite2);
-
-        if (scaling is Stretch)
-            this.invokeMethod<Unit>(
-                "drawSpriteRegion",
-                renderLayers,
-                sprite2,
-                textureWidth,
-                textureHeight,
-                u,
-                v,
-                x,
-                y,
-                width,
-                height,
-                color
-            );
-        else
-            this.invokeMethod<Unit>("drawSpriteStretched", renderLayers, sprite2, x, y, width, height, color);
-    }
-
-    fun DrawContext.drawTexture2(
-        renderLayers: Function<Identifier, RenderLayer>,
-        texture: Texture,
-        point: Point,
-        color: Int
-    ) {
-        this.drawTexture(
-            renderLayers,
-            texture.id,
-            point.x,
-            point.y,
-            texture.u.toFloat(),
-            texture.v.toFloat(),
-            texture.width,
-            texture.height,
-            texture.textureWidth,
-            texture.textureHeight,
-            color
-        );
-    }
-
-    fun DrawContext.drawTexture2(
-        renderLayers: Function<Identifier, RenderLayer>,
-        texture: Texture,
-        point: Point
-    ) {
-        this.drawTexture(
-            renderLayers,
-            texture.id,
-            point.x,
-            point.y,
-            texture.u.toFloat(),
-            texture.v.toFloat(),
-            texture.width,
-            texture.height,
-            texture.textureWidth,
-            texture.textureHeight
-        );
     }
 }

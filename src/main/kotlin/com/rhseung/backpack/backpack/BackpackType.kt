@@ -4,7 +4,6 @@ import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.util.Texture
 import net.minecraft.util.Identifier
 
-
 enum class BackpackType(val size: Int, backpackCoverTexture: String) {
     SMALL(9, "backpack_cover_0"),
     MEDIUM(18, "backpack_cover_1"),

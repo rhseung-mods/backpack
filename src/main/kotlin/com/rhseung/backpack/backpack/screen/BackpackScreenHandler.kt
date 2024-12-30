@@ -1,7 +1,11 @@
-package com.rhseung.backpack.backpack
+package com.rhseung.backpack.backpack.screen
 
+import com.rhseung.backpack.backpack.BackpackType
+import com.rhseung.backpack.backpack.storage.BackpackInventory
+import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.backpack.storage.BackpackSlot
 import com.rhseung.backpack.init.ModScreenHandlerTypesClient
-import com.rhseung.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.network.BackpackScreenPayload
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory

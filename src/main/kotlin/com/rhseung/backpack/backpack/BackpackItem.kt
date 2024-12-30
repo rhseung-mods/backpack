@@ -2,7 +2,11 @@ package com.rhseung.backpack.backpack
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModSounds
-import com.rhseung.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
+import com.rhseung.backpack.backpack.screen.BackpackTooltipComponent
+import com.rhseung.backpack.backpack.BackpackType
+import com.rhseung.backpack.backpack.storage.BackpackInventory
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
@@ -22,7 +26,6 @@ import net.minecraft.item.tooltip.TooltipData
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
@@ -48,6 +51,7 @@ class BackpackItem(
     )
 ) {
     companion object {
+        // TODO: predicate 추가하기
         val PREDICATE_OPEN: Identifier = ModMain.of("open");
         const val KEY_OPEN = "key.${ModMain.MOD_ID}.open";
         const val KEY_CATEGORY = "key.category.${ModMain.MOD_ID}.backpack";
@@ -74,8 +78,6 @@ class BackpackItem(
 
         fun openScreen(player: ServerPlayerEntity, backpack: ItemStack) {
             require(backpack.item is BackpackItem) { "ItemStack($backpack) is not a backpack" };
-
-            // TODO: f 키로 스왑한다던가 등 문제가 있어서 왼손으로 열리는 것을 막음. 나중에 수정할 것
 
             player.openHandledScreen(object : ExtendedScreenHandlerFactory<BackpackScreenPayload> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {

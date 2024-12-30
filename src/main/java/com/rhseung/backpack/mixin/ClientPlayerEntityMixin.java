@@ -1,10 +1,8 @@
 package com.rhseung.backpack.mixin;
 
 import com.rhseung.backpack.backpack.BackpackItem;
-import com.rhseung.backpack.backpack.BackpackScreenHandler;
+import com.rhseung.backpack.backpack.screen.BackpackScreenHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

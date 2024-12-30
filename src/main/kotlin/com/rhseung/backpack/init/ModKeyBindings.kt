@@ -1,7 +1,7 @@
 package com.rhseung.backpack.init
 
 import com.rhseung.backpack.backpack.BackpackItem
-import com.rhseung.backpack.network.BackpackOpenKeyPayload
+import com.rhseung.backpack.backpack.network.BackpackOpenKeyPayload
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking

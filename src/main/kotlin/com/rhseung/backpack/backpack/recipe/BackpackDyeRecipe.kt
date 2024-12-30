@@ -1,5 +1,6 @@
-package com.rhseung.backpack.backpack
+package com.rhseung.backpack.backpack.recipe
 
+import com.rhseung.backpack.backpack.BackpackItem
 import com.rhseung.backpack.init.ModRecipeSerializers
 import net.minecraft.component.type.DyedColorComponent
 import net.minecraft.item.DyeItem

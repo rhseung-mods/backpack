@@ -1,5 +1,6 @@
-package com.rhseung.backpack.backpack
+package com.rhseung.backpack.backpack.storage
 
+import com.rhseung.backpack.backpack.BackpackItem
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.ContainerComponent
 import net.minecraft.inventory.SimpleInventory
