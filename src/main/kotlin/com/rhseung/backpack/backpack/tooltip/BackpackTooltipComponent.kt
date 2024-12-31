@@ -1,16 +1,16 @@
-package com.rhseung.backpack.backpack.screen
+package com.rhseung.backpack.backpack.tooltip
 
 import com.rhseung.backpack.backpack.storage.BackpackInventory
 import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.util.Color
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.tooltip.TooltipComponent
 import net.minecraft.item.tooltip.TooltipData
 
 class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipComponent {
-    class BackpackTooltipData(val inventory: BackpackInventory) : TooltipData;
-
-    val backpackItem = inventory.backpackStack.item as BackpackItem;
+    val backpackStack = inventory.backpackStack;
+    val backpackItem = backpackStack.item as BackpackItem;
     val type = backpackItem.type;
 
     fun getHeight(): Int {
@@ -57,7 +57,6 @@ class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipCompon
 
         y += type.tooltipMiddleTexture.height;
         type.tooltipBottomTexture.draw(context, x0, y, color);
-
         type.loop { i, j ->
             val x = x0 + 3 + type.pad + j * type.slotTexture.width;
             val y = y0 + 3 + type.pad + i * type.slotTexture.height;
@@ -70,6 +69,26 @@ class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipCompon
                 x + type.borderThickness * 2,
                 y + type.borderThickness * 2
             );
+        }
+
+        if (BackpackItem.hasSelectedStack(backpackStack, inventory)) {
+            val selectedStackIndex = BackpackItem.getSelectedStackIndexWithEmpty(inventory);
+
+            val i = selectedStackIndex / 9;
+            val j = selectedStackIndex % 9;
+            val x = x0 + 3 + type.pad + j * type.slotTexture.width;
+            val y = y0 + 3 + type.pad + i * type.slotTexture.height;
+
+            context.matrices.push();
+            context.fill(
+                x + type.borderThickness * 2,
+                y + type.borderThickness * 2,
+                x + type.borderThickness * 2 + 16,
+                y + type.borderThickness * 2 + 16,
+                200,
+                Color.WHITE.withAlpha(70)
+            );
+            context.matrices.pop();
         }
     }
 }

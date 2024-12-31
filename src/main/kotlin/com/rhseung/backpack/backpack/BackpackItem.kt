@@ -2,10 +2,9 @@ package com.rhseung.backpack.backpack
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModSounds
-import com.rhseung.backpack.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
 import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
-import com.rhseung.backpack.backpack.screen.BackpackTooltipComponent
-import com.rhseung.backpack.backpack.BackpackType
+import com.rhseung.backpack.backpack.tooltip.BackpackTooltipComponent
 import com.rhseung.backpack.backpack.storage.BackpackInventory
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -47,12 +46,12 @@ class BackpackItem(
         EquippableComponent
             .builder(EquipmentSlot.CHEST)
             .equipSound(ModSounds.EQUIP_BACKPACK)
-            .build()    // TODO: model도 추가하기
+            .build()
     )
 ) {
     companion object {
         // TODO: predicate 추가하기
-        val PREDICATE_OPEN: Identifier = ModMain.of("open");
+        val PREDICATE_OPEN: Identifier = ModMain.id("open");
         const val KEY_OPEN = "key.${ModMain.MOD_ID}.open";
         const val KEY_CATEGORY = "key.category.${ModMain.MOD_ID}.backpack";
         val ITEM_BAR_COLOR = ColorHelper.fromFloats(1.0F, 0.44F, 0.53F, 1.0F);
@@ -79,7 +78,7 @@ class BackpackItem(
         fun openScreen(player: ServerPlayerEntity, backpack: ItemStack) {
             require(backpack.item is BackpackItem) { "ItemStack($backpack) is not a backpack" };
 
-            player.openHandledScreen(object : ExtendedScreenHandlerFactory<BackpackScreenPayload> {
+            player.openHandledScreen(object : ExtendedScreenHandlerFactory<BackpackScreenS2CPayload> {
                 override fun createMenu(syncId: Int, playerInventory: PlayerInventory, player: PlayerEntity): ScreenHandler {
                     return BackpackScreenHandler(syncId, playerInventory, backpack);
                 }
@@ -88,8 +87,8 @@ class BackpackItem(
                     return Text.translatable(backpack.item.translationKey);
                 }
 
-                override fun getScreenOpeningData(player: ServerPlayerEntity): BackpackScreenPayload {
-                    return BackpackScreenPayload(backpack);
+                override fun getScreenOpeningData(player: ServerPlayerEntity): BackpackScreenS2CPayload {
+                    return BackpackScreenS2CPayload(backpack);
                 }
             });
         }
@@ -114,8 +113,68 @@ class BackpackItem(
             player.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f);
         }
 
+        fun getInventory(stack: ItemStack): BackpackInventory {
+            return BackpackInventory(stack);
+        }
+
         fun getColor(stack: ItemStack): Int {
             return DyedColorComponent.getColor(stack, COLOR_DEFAULT);
+        }
+
+        fun getSelectedStackIndex(stack: ItemStack): Int {
+            return getSelectedStackIndex(stack, getInventory(stack));
+        }
+
+        fun getSelectedStackIndex(stack: ItemStack, inventory: BackpackInventory): Int {
+            return inventory.selectedStackIndex;
+        }
+
+        fun getSelectedStackIndexWithEmpty(inventory: BackpackInventory): Int {
+            return getSelectedStackIndexWithEmpty(inventory.selectedStackIndex, inventory);
+        }
+
+        fun getSelectedStackIndexWithEmpty(selectedStackIndex: Int, inventory: BackpackInventory): Int {
+            var countNotEmptyStack = 0;
+            var notEmptySelectedStackIndex = -1;
+
+            for (i in 0..<inventory.heldStacks.size) {
+                val stack = inventory.heldStacks[i];
+
+                if (!stack.isEmpty) {
+                    if (selectedStackIndex == countNotEmptyStack) {
+                        notEmptySelectedStackIndex = i;
+                        break;
+                    }
+
+                    countNotEmptyStack++;
+                }
+            }
+
+            return notEmptySelectedStackIndex;
+        }
+
+        fun setSelectedStackIndex(stack: ItemStack, index: Int) {
+            setSelectedStackIndex(stack, index, getInventory(stack));
+        }
+
+        fun setSelectedStackIndex(stack: ItemStack, index: Int, inventory: BackpackInventory) {
+            inventory.update(index);
+        }
+
+        fun getSelectedStack(stack: ItemStack): ItemStack {
+            return getSelectedStack(stack, getInventory(stack));
+        }
+
+        fun getSelectedStack(stack: ItemStack, inventory: BackpackInventory): ItemStack {
+            return inventory.getStack(getSelectedStackIndexWithEmpty(inventory.selectedStackIndex, inventory));
+        }
+
+        fun hasSelectedStack(stack: ItemStack): Boolean {
+            return hasSelectedStack(stack, getInventory(stack));
+        }
+
+        fun hasSelectedStack(stack: ItemStack, inventory: BackpackInventory): Boolean {
+            return getSelectedStackIndex(stack, inventory) != -1;
         }
     }
 
@@ -134,10 +193,6 @@ class BackpackItem(
             BackpackItem.openScreen(user as ServerPlayerEntity, stack);
             return ActionResult.SUCCESS_SERVER.withNewHandStack(stack);
         }
-    }
-
-    fun getInventory(stack: ItemStack): BackpackInventory {
-        return BackpackInventory(stack);
     }
 
     override fun isItemBarVisible(stack: ItemStack): Boolean {
@@ -187,7 +242,10 @@ class BackpackItem(
         // 우클릭 + 아무것도 안 들고 있음 -> 가방에서 아이템 빼내기
         else if (clickType == ClickType.RIGHT && otherStack.isEmpty) {
             if (slot.canTakePartial(player)) {
-                val removed = inventory.removeFirstStack();
+                val removed = if (hasSelectedStack(stack, inventory))
+                    inventory.removeStack(getSelectedStackIndexWithEmpty(inventory))
+                else
+                    inventory.removeFirstStack();
 
                 if (removed.isEmpty.not()) {
                     playTakeSound(player);
@@ -229,7 +287,11 @@ class BackpackItem(
         }
         // 가방 들고 있는 상태에서 다른 슬롯 (비어 있음) 우클릭 -> 가방에서 해당 슬롯에 아이템을 뺌
         else if (clickType == ClickType.RIGHT && slotStack.isEmpty) {
-            val removed = inventory.removeFirstStack();
+            val removed = if (hasSelectedStack(stack, inventory))
+                inventory.removeStack(getSelectedStackIndexWithEmpty(inventory))
+            else
+                inventory.removeFirstStack();
+
             if (removed.isEmpty.not()) {
                 val remain = slot.insertStack(removed); // 슬롯에 64개 이상 들어가면 나머지를 반환함
 
@@ -248,6 +310,6 @@ class BackpackItem(
     }
 
     override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
-        return Optional.of(BackpackTooltipComponent.BackpackTooltipData(getInventory(stack)));
+        return Optional.of(getInventory(stack));
     }
 }

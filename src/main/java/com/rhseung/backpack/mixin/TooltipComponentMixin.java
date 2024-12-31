@@ -1,6 +1,8 @@
 package com.rhseung.backpack.mixin;
 
-import com.rhseung.backpack.backpack.screen.BackpackTooltipComponent;
+import com.rhseung.backpack.backpack.storage.BackpackContentsComponent;
+import com.rhseung.backpack.backpack.storage.BackpackInventory;
+import com.rhseung.backpack.backpack.tooltip.BackpackTooltipComponent;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
 import net.minecraft.client.gui.tooltip.ProfilesTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -22,7 +24,7 @@ public interface TooltipComponentMixin {
         switch (tooltipData) {
             case BundleTooltipData d -> cir.setReturnValue(new BundleTooltipComponent(d.contents()));
             case ProfilesTooltipComponent.ProfilesData d -> cir.setReturnValue(new ProfilesTooltipComponent(d));
-            case BackpackTooltipComponent.BackpackTooltipData d -> cir.setReturnValue(new BackpackTooltipComponent(d.getInventory()));
+            case BackpackInventory d -> cir.setReturnValue(new BackpackTooltipComponent(d));
             default -> throw new IllegalArgumentException("Unknown TooltipComponent");
         }
     }

@@ -14,12 +14,12 @@ enum class BackpackType(val size: Int, backpackCoverTexture: String) {
     init { require(size in 1..54) { "Invalid backpack size: $size" } }
 
     val row = (size / 9f).toInt();
-    val backpackCoverTextureId: Identifier = ModMain.of(backpackCoverTexture);
+    val backpackCoverTextureId: Identifier = ModMain.id(backpackCoverTexture);
 
-    val texture = Texture(ModMain.of("textures/gui/container/backpack.png"), 176, 226);
-    val slotTexture = Texture(ModMain.of("textures/gui/container/backpack_slot.png"), 18, 18);
-    val slotBorderTexture = Texture(ModMain.of("textures/gui/container/backpack_slot_border.png"), 20, 20);
-    val tooltipTexture = Texture(ModMain.of("textures/gui/container/backpack_tooltip.png"), 176, 122);
+    val texture = Texture(ModMain.id("textures/gui/container/backpack.png"), 176, 226);
+    val slotTexture = Texture(ModMain.id("textures/gui/container/backpack_slot.png"), 18, 18);
+    val slotBorderTexture = Texture(ModMain.id("textures/gui/container/backpack_slot_border.png"), 20, 20);
+    val tooltipTexture = Texture(ModMain.id("textures/gui/container/backpack_tooltip.png"), 176, 122);
 
     val pad = 3;
 

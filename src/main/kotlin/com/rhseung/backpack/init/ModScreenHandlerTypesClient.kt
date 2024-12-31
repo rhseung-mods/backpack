@@ -2,7 +2,7 @@ package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
-import com.rhseung.backpack.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
@@ -29,6 +29,6 @@ object ModScreenHandlerTypesClient : IModInit {
         return Registry.register(Registries.SCREEN_HANDLER, id, ExtendedScreenHandlerType(factory, packetCodec));
     }
 
-    val BACKPACK_SCREEN_HANDLER: ExtendedScreenHandlerType<BackpackScreenHandler, BackpackScreenPayload> =
-        register(ModMain.of("backpack"), ::BackpackScreenHandler, BackpackScreenPayload.PACKET_CODEC);
+    val BACKPACK_SCREEN_HANDLER: ExtendedScreenHandlerType<BackpackScreenHandler, BackpackScreenS2CPayload> =
+        register(ModMain.id("backpack"), ::BackpackScreenHandler, BackpackScreenS2CPayload.PACKET_CODEC);
 }

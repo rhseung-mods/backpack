@@ -1,6 +1,7 @@
 package com.rhseung.backpack.backpack.screen
 
 import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.backpack.tooltip.BackpackTooltipSubmenuHandler
 import com.rhseung.backpack.util.Color
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen

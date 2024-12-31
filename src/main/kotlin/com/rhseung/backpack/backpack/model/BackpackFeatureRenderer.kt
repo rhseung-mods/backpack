@@ -43,7 +43,7 @@ class BackpackFeatureRenderer(
 
         val backpackVertexConsumer = ItemRenderer.getItemGlintConsumer(
             vertexConsumers,
-            backpackModel.getLayer(ModMain.of("textures/entity/backpack.png")),
+            backpackModel.getLayer(ModMain.id("textures/entity/backpack.png")),
             false,
             backpackStack.hasGlint()
         );

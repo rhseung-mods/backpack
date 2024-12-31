@@ -15,13 +15,13 @@ import net.minecraft.registry.RegistryKeys
 
 object ModItems : IModInit {
     fun <T : Item> register(path: String, item: T, group: RegistryKey<ItemGroup>? = null): T {
-        val ret = Registry.register(Registries.ITEM, ModMain.of(path), item);
+        val ret = Registry.register(Registries.ITEM, ModMain.id(path), item);
         group?.let { ItemGroupEvents.modifyEntriesEvent(it).register { entries -> entries.add(ret) } }
         return ret;
     }
 
     fun ofSetting(id: String, settings: Settings = Settings()): Settings {
-        return settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, ModMain.of(id)));
+        return settings.registryKey(RegistryKey.of(RegistryKeys.ITEM, ModMain.id(id)));
     }
 
     fun registerBackpack(path: String, type: BackpackType): BackpackItem {

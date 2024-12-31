@@ -8,12 +8,12 @@ import net.minecraft.sound.SoundEvent
 
 object ModSounds : IModInit {
     fun register(name: String): SoundEvent {
-        val id = ModMain.of(name);
+        val id = ModMain.id(name);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 
     fun registerRef(name: String): RegistryEntry.Reference<SoundEvent> {
-        val id = ModMain.of(name);
+        val id = ModMain.id(name);
         return Registry.registerReference(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 

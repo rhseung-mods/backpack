@@ -4,6 +4,7 @@ import com.rhseung.backpack.backpack.BackpackItem
 import com.rhseung.backpack.init.ModBlocks
 import com.rhseung.backpack.init.ModComponents
 import com.rhseung.backpack.init.ModItems
+import com.rhseung.backpack.init.ModTags
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider
 import net.minecraft.registry.RegistryWrapper
@@ -21,7 +22,7 @@ class LanguageProvider(
         translationBuilder.add(ModItems.LARGE_BACKPACK, "Large Backpack");
         translationBuilder.add(ModItems.HUGE_BACKPACK, "Huge Backpack");
         translationBuilder.add(ModItems.GIGANTIC_BACKPACK, "Gigantic Backpack");
-
+        translationBuilder.add(ModTags.BACKPACK, "Backpack");
         translationBuilder.add(BackpackItem.KEY_OPEN, "Open Backpack");
         translationBuilder.add(BackpackItem.KEY_CATEGORY, "Backpack");
     }

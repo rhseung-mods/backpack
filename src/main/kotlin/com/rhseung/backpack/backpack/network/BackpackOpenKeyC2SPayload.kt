@@ -9,12 +9,12 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
 
-class BackpackOpenKeyPayload : CustomPayload {
-    companion object : ServerPlayNetworking.PlayPayloadHandler<BackpackOpenKeyPayload> {
-        val PACKET_ID = CustomPayload.Id<BackpackOpenKeyPayload>(ModMain.of("backpack_open"));
-        val PACKET_CODEC = PacketCodecs.codec(Codec.unit(BackpackOpenKeyPayload()));
+class BackpackOpenKeyC2SPayload : CustomPayload {
+    companion object : ServerPlayNetworking.PlayPayloadHandler<BackpackOpenKeyC2SPayload> {
+        val PACKET_ID = CustomPayload.Id<BackpackOpenKeyC2SPayload>(ModMain.id("backpack_open"));
+        val PACKET_CODEC = PacketCodecs.codec(Codec.unit(BackpackOpenKeyC2SPayload()));
 
-        override fun receive(payload: BackpackOpenKeyPayload, ctx: ServerPlayNetworking.Context) {
+        override fun receive(payload: BackpackOpenKeyC2SPayload, ctx: ServerPlayNetworking.Context) {
             val backpack = ctx.player().getEquippedStack(EquipmentSlot.CHEST);
             val item = backpack.item;
 
@@ -25,11 +25,11 @@ class BackpackOpenKeyPayload : CustomPayload {
 
         fun register() {
             PayloadTypeRegistry.playC2S().register(PACKET_ID, PACKET_CODEC);
-            ServerPlayNetworking.registerGlobalReceiver(PACKET_ID, BackpackOpenKeyPayload::receive);
+            ServerPlayNetworking.registerGlobalReceiver(PACKET_ID, BackpackOpenKeyC2SPayload::receive);
         }
     }
 
-    override fun getId(): CustomPayload.Id<BackpackOpenKeyPayload> {
+    override fun getId(): CustomPayload.Id<BackpackOpenKeyC2SPayload> {
         return PACKET_ID;
     }
 }

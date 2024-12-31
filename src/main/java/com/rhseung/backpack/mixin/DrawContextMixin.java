@@ -1,7 +1,7 @@
 package com.rhseung.backpack.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import com.rhseung.backpack.backpack.screen.BackpackTooltipComponent;
+import com.rhseung.backpack.backpack.tooltip.BackpackTooltipComponent;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import org.spongepowered.asm.mixin.Mixin;

@@ -17,12 +17,12 @@ import net.minecraft.registry.RegistryKeys
 
 object ModBlocks : IModInit {
     fun <T: Block> register(path: String, block: T, group: RegistryKey<ItemGroup>? = null): T {
-        val id = ModMain.of(path);
+        val id = ModMain.id(path);
         val registryKey = RegistryKey.of(RegistryKeys.ITEM, id);
         val ret = Registry.register(Registries.BLOCK, id, block);
         register(path, BlockItem(ret, Item.Settings().registryKey(registryKey)), group);
         return ret;
     }
 
-    val CRATE = register("crate", CrateBlock(Settings.copy(Blocks.BARREL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, ModMain.of("crate")))), ItemGroups.FUNCTIONAL);
+    val CRATE = register("crate", CrateBlock(Settings.copy(Blocks.BARREL).registryKey(RegistryKey.of(RegistryKeys.BLOCK, ModMain.id("crate")))), ItemGroups.FUNCTIONAL);
 }

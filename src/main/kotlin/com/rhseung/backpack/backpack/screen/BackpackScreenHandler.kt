@@ -5,7 +5,7 @@ import com.rhseung.backpack.backpack.storage.BackpackInventory
 import com.rhseung.backpack.backpack.BackpackItem
 import com.rhseung.backpack.backpack.storage.BackpackSlot
 import com.rhseung.backpack.init.ModScreenHandlerTypesClient
-import com.rhseung.backpack.backpack.network.BackpackScreenPayload
+import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
@@ -24,7 +24,7 @@ class BackpackScreenHandler(
     constructor(syncId: Int, playerInventory: PlayerInventory, backpackStack: ItemStack) :
         this(syncId, playerInventory, BackpackInventory(backpackStack), backpackStack);
 
-    constructor(syncId: Int, playerInventory: PlayerInventory, backpackScreenPayload: BackpackScreenPayload) :
+    constructor(syncId: Int, playerInventory: PlayerInventory, backpackScreenPayload: BackpackScreenS2CPayload) :
         this(syncId, playerInventory, backpackScreenPayload.stack);
 
     init {

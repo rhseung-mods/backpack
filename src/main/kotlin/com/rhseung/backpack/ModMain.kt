@@ -17,7 +17,7 @@ object ModMain : ModInitializer {
 	const val MOD_ID = "backpack";
     val LOGGER: Logger = LoggerFactory.getLogger(MOD_ID);
 
-	fun of(path: String): Identifier = Identifier.of(MOD_ID, path);
+	fun id(path: String): Identifier = Identifier.of(MOD_ID, path);
 
 	override fun onInitialize() {
 		ModBlockEntityTypes.load();

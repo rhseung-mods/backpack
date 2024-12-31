@@ -31,8 +31,8 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
             .item(item)
             .parent("generated")
             .textures(mapOf(
-                TextureKey.LAYER0 to ModMain.of("backpack_opened"),
-                TextureKey.LAYER1 to ModMain.of("backpack_color_panel")
+                TextureKey.LAYER0 to ModMain.id("backpack_opened"),
+                TextureKey.LAYER1 to ModMain.id("backpack_color_panel")
             ));
     }
 
@@ -46,7 +46,7 @@ class ModelProvider(output: FabricDataOutput) : FabricModelProvider(output) {
 //                ) to backpackOpened(item)
 //            ))
             .textures(mapOf(
-                TextureKey.LAYER0 to ModMain.of("backpack"),
+                TextureKey.LAYER0 to ModMain.id("backpack"),
                 TextureKey.LAYER1 to item.type.backpackCoverTextureId
             ));
     }
