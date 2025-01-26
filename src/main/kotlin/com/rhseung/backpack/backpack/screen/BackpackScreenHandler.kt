@@ -5,7 +5,7 @@ import com.rhseung.backpack.backpack.storage.BackpackInventory
 import com.rhseung.backpack.backpack.BackpackItem
 import com.rhseung.backpack.backpack.storage.BackpackSlot
 import com.rhseung.backpack.init.ModScreenHandlerTypesClient
-import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
+import com.rhseung.backpack.backpack.network.payload.BackpackScreenS2CPayload
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
@@ -22,7 +22,7 @@ class BackpackScreenHandler(
     val backpackType = (this.backpackStack.item as BackpackItem).type;
 
     constructor(syncId: Int, playerInventory: PlayerInventory, backpackStack: ItemStack) :
-        this(syncId, playerInventory, BackpackInventory(backpackStack), backpackStack);
+        this(syncId, playerInventory, BackpackItem.getInventory(backpackStack), backpackStack);
 
     constructor(syncId: Int, playerInventory: PlayerInventory, backpackScreenPayload: BackpackScreenS2CPayload) :
         this(syncId, playerInventory, backpackScreenPayload.stack);
@@ -45,13 +45,12 @@ class BackpackScreenHandler(
                 8,
                 type.backpackHeight + 15
             );
-            this.backpackInventory.update();
         }
     }
 
     fun addBackpackSlots(backpackInventory: BackpackInventory, type: BackpackType, left: Int, top: Int) {
         type.loop { i, j ->
-            this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * 9, left + j * 18, top + i * 18));
+            this.addSlot(BackpackSlot(backpackStack, backpackInventory, j + i * 9, left + j * type.slotTexture.width, top + i * type.slotTexture.height));
         };
     }
 
@@ -69,6 +68,9 @@ class BackpackScreenHandler(
         }
     }
 
+    /**
+     * @see net.minecraft.screen.GenericContainerScreenHandler.quickMove
+     */
     override fun quickMove(player: PlayerEntity, slotIndex: Int): ItemStack {
         val slot = this.slots[slotIndex];
 
@@ -105,4 +107,5 @@ class BackpackScreenHandler(
         super.onClosed(player);
         this.backpackInventory.onClose(player);
     }
+
 }

@@ -2,7 +2,7 @@ package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
-import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
+import com.rhseung.backpack.backpack.network.payload.BackpackScreenS2CPayload
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType

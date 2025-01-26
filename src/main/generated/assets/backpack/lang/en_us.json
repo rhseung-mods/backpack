@@ -6,5 +6,6 @@
   "item.backpack.medium_backpack": "Medium Backpack",
   "item.backpack.small_backpack": "Small Backpack",
   "key.backpack.open": "Open Backpack",
-  "key.category.backpack.backpack": "Backpack"
+  "key.category.backpack.backpack": "Backpack",
+  "tag.item.backpack.backpack": "Backpack"
 }

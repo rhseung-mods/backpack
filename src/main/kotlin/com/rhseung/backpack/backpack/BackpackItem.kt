@@ -2,10 +2,11 @@ package com.rhseung.backpack.backpack
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.init.ModSounds
-import com.rhseung.backpack.backpack.network.BackpackScreenS2CPayload
+import com.rhseung.backpack.backpack.network.payload.BackpackScreenS2CPayload
 import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
-import com.rhseung.backpack.backpack.tooltip.BackpackTooltipComponent
 import com.rhseung.backpack.backpack.storage.BackpackInventory
+import com.rhseung.backpack.backpack.tooltip.BackpackTooltipData
+import com.rhseung.backpack.init.ModComponents
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry
@@ -43,10 +44,11 @@ class BackpackItem(
     .maxCount(1)
     .component(
         DataComponentTypes.EQUIPPABLE,
-        EquippableComponent
-            .builder(EquipmentSlot.CHEST)
-            .equipSound(ModSounds.EQUIP_BACKPACK)
-            .build()
+        EquippableComponent.builder(EquipmentSlot.CHEST).equipSound(ModSounds.EQUIP_BACKPACK).build()
+    )
+    .component(
+        ModComponents.BACKPACK_CONTENTS,
+        BackpackInventory.DEFAULT(type.size)
     )
 ) {
     companion object {
@@ -113,29 +115,35 @@ class BackpackItem(
             player.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, 0.8f, 0.8f + player.world.random.nextFloat() * 0.4f);
         }
 
-        fun getInventory(stack: ItemStack): BackpackInventory {
-            return BackpackInventory(stack);
+        fun getInventory(backpackStack: ItemStack): BackpackInventory {
+            val type = (backpackStack.item as? BackpackItem)?.type ?: throw IllegalArgumentException("ItemStack is not a backpack");
+
+            if (!backpackStack.contains(ModComponents.BACKPACK_CONTENTS))
+                backpackStack.set(ModComponents.BACKPACK_CONTENTS, BackpackInventory.DEFAULT(type.size));
+
+            return backpackStack.get(ModComponents.BACKPACK_CONTENTS)!!;
         }
 
         fun getColor(stack: ItemStack): Int {
             return DyedColorComponent.getColor(stack, COLOR_DEFAULT);
         }
 
-        fun getSelectedStackIndex(stack: ItemStack): Int {
-            return getSelectedStackIndex(stack, getInventory(stack));
+        fun getSelectedStackIndex(backpackStack: ItemStack): Int {
+            return getSelectedStackIndex(getInventory(backpackStack));
         }
 
-        fun getSelectedStackIndex(stack: ItemStack, inventory: BackpackInventory): Int {
+        fun getSelectedStackIndex(inventory: BackpackInventory): Int {
             return inventory.selectedStackIndex;
         }
 
         fun getSelectedStackIndexWithEmpty(inventory: BackpackInventory): Int {
-            return getSelectedStackIndexWithEmpty(inventory.selectedStackIndex, inventory);
-        }
+            val selectedStackIndex = getSelectedStackIndex(inventory);
 
-        fun getSelectedStackIndexWithEmpty(selectedStackIndex: Int, inventory: BackpackInventory): Int {
             var countNotEmptyStack = 0;
             var notEmptySelectedStackIndex = -1;
+
+            if (inventory.isEmpty)
+                throw IllegalStateException("Inventory is empty");
 
             for (i in 0..<inventory.heldStacks.size) {
                 val stack = inventory.heldStacks[i];
@@ -150,31 +158,36 @@ class BackpackItem(
                 }
             }
 
-            return notEmptySelectedStackIndex;
+            if (notEmptySelectedStackIndex == -1)
+                throw IllegalStateException("Selected stack index is invalid");
+            else
+                return notEmptySelectedStackIndex;
         }
 
-        fun setSelectedStackIndex(stack: ItemStack, index: Int) {
-            setSelectedStackIndex(stack, index, getInventory(stack));
-        }
-
-        fun setSelectedStackIndex(stack: ItemStack, index: Int, inventory: BackpackInventory) {
-            inventory.update(index);
-        }
-
-        fun getSelectedStack(stack: ItemStack): ItemStack {
-            return getSelectedStack(stack, getInventory(stack));
-        }
-
-        fun getSelectedStack(stack: ItemStack, inventory: BackpackInventory): ItemStack {
-            return inventory.getStack(getSelectedStackIndexWithEmpty(inventory.selectedStackIndex, inventory));
+        fun setSelectedStackIndex(backpackStack: ItemStack, selectedStackIndex: Int) {
+            val inventory = getInventory(backpackStack);
+            inventory.update(backpackStack, selectedStackIndex);
         }
 
         fun hasSelectedStack(stack: ItemStack): Boolean {
-            return hasSelectedStack(stack, getInventory(stack));
+            return hasSelectedStack(getInventory(stack));
         }
 
-        fun hasSelectedStack(stack: ItemStack, inventory: BackpackInventory): Boolean {
-            return getSelectedStackIndex(stack, inventory) != -1;
+        fun hasSelectedStack(inventory: BackpackInventory): Boolean {
+            return getSelectedStackIndex(inventory) != -1;
+        }
+
+        fun areEqual(stack: ItemStack, otherStack: ItemStack): Boolean {
+            val item = stack.item;
+            val otherItem = otherStack.item;
+
+            // TODO: 근데 이러면 색, 타입, 콘텐츠가 같으면 같은 스택으로 취급해버리잖아 그건 아닌데;
+            return if (item is BackpackItem && otherItem is BackpackItem)
+                item.type == otherItem.type &&
+                stack.get(ModComponents.BACKPACK_CONTENTS) == otherStack.get(ModComponents.BACKPACK_CONTENTS) &&
+                getColor(stack) == getColor(otherStack);
+            else
+                ItemStack.areEqual(stack, otherStack);
         }
     }
 
@@ -210,7 +223,9 @@ class BackpackItem(
         return (1 + MathHelper.multiplyFraction(inventory.occupancy, 12)).coerceAtMost(13);
     }
 
-    fun onContentChanged(player: PlayerEntity) {
+    fun onContentChanged(backpackStack: ItemStack, player: PlayerEntity) {
+        val inventory = getInventory(backpackStack);
+        inventory.update(backpackStack, inventory.selectedStackIndex);
         player.currentScreenHandler?.onContentChanged(player.inventory);
     }
 
@@ -236,13 +251,13 @@ class BackpackItem(
                 playInsertFailSound(player);
             }
 
-            this.onContentChanged(player);
+            this.onContentChanged(stack, player);
             return true;
         }
         // 우클릭 + 아무것도 안 들고 있음 -> 가방에서 아이템 빼내기
         else if (clickType == ClickType.RIGHT && otherStack.isEmpty) {
             if (slot.canTakePartial(player)) {
-                val removed = if (hasSelectedStack(stack, inventory))
+                val removed = if (hasSelectedStack(inventory))
                     inventory.removeStack(getSelectedStackIndexWithEmpty(inventory))
                 else
                     inventory.removeFirstStack();
@@ -253,7 +268,7 @@ class BackpackItem(
                 }
             }
 
-            this.onContentChanged(player);
+            this.onContentChanged(stack, player);
             return true;
         }
         else {
@@ -282,12 +297,12 @@ class BackpackItem(
                 playInsertFailSound(player);
             }
 
-            this.onContentChanged(player);
+            this.onContentChanged(stack, player);
             return true;
         }
         // 가방 들고 있는 상태에서 다른 슬롯 (비어 있음) 우클릭 -> 가방에서 해당 슬롯에 아이템을 뺌
         else if (clickType == ClickType.RIGHT && slotStack.isEmpty) {
-            val removed = if (hasSelectedStack(stack, inventory))
+            val removed = if (hasSelectedStack(inventory))
                 inventory.removeStack(getSelectedStackIndexWithEmpty(inventory))
             else
                 inventory.removeFirstStack();
@@ -301,7 +316,7 @@ class BackpackItem(
                     playTakeSound(player);
             }
 
-            this.onContentChanged(player);
+            this.onContentChanged(stack, player);
             return true;
         }
         else {
@@ -310,6 +325,7 @@ class BackpackItem(
     }
 
     override fun getTooltipData(stack: ItemStack): Optional<TooltipData> {
-        return Optional.of(getInventory(stack));
+//        println(stack.get(ModComponents.BACKPACK_CONTENTS)?.selectedStackIndex);
+        return Optional.of(BackpackTooltipData(stack));
     }
 }

@@ -1,10 +1,10 @@
-package com.rhseung.backpack.backpack.network
+package com.rhseung.backpack.backpack.network.payload
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.backpack.BackpackItem
-import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.client.MinecraftClient
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.packet.CustomPayload
@@ -18,11 +18,33 @@ class BackpackItemSelectedC2SPayload(val slot: Int, val selectedItemIndex: Int) 
         );
 
         override fun receive(payload: BackpackItemSelectedC2SPayload, ctx: ServerPlayNetworking.Context) {
-            val screenHandler = ctx.player().currentScreenHandler;
-            val stack = screenHandler.getSlot(payload.slot).stack;
+            ctx.server().execute {
+                val slot = payload.slot;
+                val selectedItemIndex = payload.selectedItemIndex;
 
-            if (stack.item is BackpackItem)
-                BackpackItem.setSelectedStackIndex(stack, payload.selectedItemIndex);
+                val clientPlayer = MinecraftClient.getInstance().player;
+                val serverPlayer = ctx.player();
+
+                val clientScreenHandler = clientPlayer?.currentScreenHandler;
+                val serverScreenHandler = serverPlayer.currentScreenHandler;
+
+                if (clientScreenHandler != null && slot in clientScreenHandler.slots.indices) {
+                    val stack = clientScreenHandler.getSlot(slot).stack;
+                    if (stack.item is BackpackItem) {
+                        BackpackItem.setSelectedStackIndex(stack, selectedItemIndex);
+                    }
+                }
+
+                if (slot in serverScreenHandler.slots.indices) {
+                    val stack = serverScreenHandler.getSlot(slot).stack;
+                    if (stack.item is BackpackItem) {
+                        serverPlayer.updateLastActionTime();
+                        serverScreenHandler.disableSyncing();
+                        BackpackItem.setSelectedStackIndex(stack, selectedItemIndex);
+                        serverScreenHandler.enableSyncing();
+                    }
+                }
+            }
         }
 
         fun register() {

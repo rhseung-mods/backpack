@@ -1,4 +1,4 @@
-package com.rhseung.backpack.backpack.network
+package com.rhseung.backpack.backpack.network.payload
 
 import com.rhseung.backpack.ModMain
 import net.fabricmc.api.EnvType

@@ -1,16 +1,17 @@
 package com.rhseung.backpack.backpack.tooltip
 
-import com.rhseung.backpack.backpack.storage.BackpackInventory
 import com.rhseung.backpack.backpack.BackpackItem
+import com.rhseung.backpack.backpack.screen.BackpackScreenHandler
 import com.rhseung.backpack.util.Color
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.tooltip.TooltipComponent
-import net.minecraft.item.tooltip.TooltipData
+import net.minecraft.item.ItemStack
 
-class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipComponent {
-    val backpackStack = inventory.backpackStack;
+class BackpackTooltipComponent(val backpackStack: ItemStack) : TooltipComponent {
     val backpackItem = backpackStack.item as BackpackItem;
+    val inventory = BackpackItem.getInventory(backpackStack);
     val type = backpackItem.type;
 
     fun getHeight(): Int {
@@ -33,9 +34,16 @@ class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipCompon
         height: Int,
         context: DrawContext
     ) {
+        if (inventory.isEmpty)
+            return;
+
+        val screenHandler = MinecraftClient.getInstance().player?.currentScreenHandler;
+        if (screenHandler is BackpackScreenHandler && BackpackItem.areEqual(screenHandler.backpackStack, backpackStack))
+            return;
+
         val x0 = x0 - 4;
         val y0 = y0 - (getHeight() + 2) - 16;
-        val color = BackpackItem.Companion.getColor(inventory.backpackStack);
+        val color = BackpackItem.getColor(backpackStack);
 
         var y = y0;
         type.tooltipTopTexture.draw(context, x0, y, color);
@@ -71,7 +79,7 @@ class BackpackTooltipComponent(val inventory: BackpackInventory) : TooltipCompon
             );
         }
 
-        if (BackpackItem.hasSelectedStack(backpackStack, inventory)) {
+        if (BackpackItem.hasSelectedStack(inventory)) {
             val selectedStackIndex = BackpackItem.getSelectedStackIndexWithEmpty(inventory);
 
             val i = selectedStackIndex / 9;

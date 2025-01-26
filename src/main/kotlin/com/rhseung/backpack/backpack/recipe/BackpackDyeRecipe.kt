@@ -12,7 +12,7 @@ import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.RegistryWrapper
 import net.minecraft.world.World
 
-class BackpackDyeRecipe(val craftingRecipeCategory: CraftingRecipeCategory) : SpecialCraftingRecipe(craftingRecipeCategory) {
+class BackpackDyeRecipe(craftingRecipeCategory: CraftingRecipeCategory) : SpecialCraftingRecipe(craftingRecipeCategory) {
     companion object {
         val SERIALIZER = ModRecipeSerializers.BACKPACK_DYE;
     }

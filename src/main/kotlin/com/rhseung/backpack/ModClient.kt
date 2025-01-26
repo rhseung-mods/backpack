@@ -21,8 +21,6 @@ object ModClient : ClientModInitializer {
         BackpackItem.onClient(ModItems.HUGE_BACKPACK);
         BackpackItem.onClient(ModItems.GIGANTIC_BACKPACK);
 
-//        EntityModelLayerRegistry.registerModelLayer {  }
-
         HandledScreens.register(ModScreenHandlerTypesClient.BACKPACK_SCREEN_HANDLER, ::BackpackScreen);
     }
 }

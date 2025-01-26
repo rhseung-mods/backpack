@@ -1,10 +1,10 @@
-// 1.21.3	2024-12-31T15:11:15.7713281	Backpack/Model Definitions
+// 1.21.3	2024-12-31T19:53:58.6492332	Backpack/Model Definitions
+9a10fa2b1584bc5607a2e73f3a6931fc7c090f69 assets\backpack\models\item\large_backpack.json
+0958ee496ebe6a18ba487abc7dedcb1b7d5dcbbe assets\backpack\models\item\gigantic_backpack.json
+650e69f03cf9cf6a985b0a0d4425ad92d37f0c7b assets\backpack\models\item\huge_backpack.json
 79fe021b30d0a91b92162cc9b701d0b32898a488 assets\backpack\models\block\crate.json
 015b228d0eae75ff9a5c104aa1d9960faf1be98f assets\backpack\models\block\crate_open.json
-2e182363a2622c9f54e75268085c463a0c9a2a8a assets\backpack\blockstates\crate.json
-784ca69441d96a79c274ef138dc1fad0f7038b39 assets\backpack\models\item\medium_backpack.json
-0958ee496ebe6a18ba487abc7dedcb1b7d5dcbbe assets\backpack\models\item\gigantic_backpack.json
-e8762c51ef64ac9e51002b914cbb2f34ad82fa63 assets\backpack\models\item\small_backpack.json
 4a1b078c6862c3091bdb591ef1ae15ab03501042 assets\backpack\models\item\crate.json
-650e69f03cf9cf6a985b0a0d4425ad92d37f0c7b assets\backpack\models\item\huge_backpack.json
-9a10fa2b1584bc5607a2e73f3a6931fc7c090f69 assets\backpack\models\item\large_backpack.json
+784ca69441d96a79c274ef138dc1fad0f7038b39 assets\backpack\models\item\medium_backpack.json
+2e182363a2622c9f54e75268085c463a0c9a2a8a assets\backpack\blockstates\crate.json
+e8762c51ef64ac9e51002b914cbb2f34ad82fa63 assets\backpack\models\item\small_backpack.json

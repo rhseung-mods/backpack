@@ -1,4 +1,4 @@
-package com.rhseung.backpack.backpack.network
+package com.rhseung.backpack.backpack.network.payload
 
 import com.mojang.serialization.Codec
 import com.rhseung.backpack.ModMain

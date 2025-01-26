@@ -2,6 +2,7 @@ package com.rhseung.backpack.init
 
 import com.rhseung.backpack.ModMain
 import com.rhseung.backpack.backpack.storage.BackpackContentsComponent
+import com.rhseung.backpack.backpack.storage.BackpackInventory
 import net.minecraft.component.ComponentType
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
@@ -12,7 +13,8 @@ object ModComponents : IModInit {
     }
 
     val BACKPACK_CONTENTS = register("backpack_contents") { it
-        .codec(BackpackContentsComponent.CODEC)
-        .packetCodec(BackpackContentsComponent.PACKET_CODEC)
+        .codec(BackpackInventory.CODEC)
+        .packetCodec(BackpackInventory.PACKET_CODEC)
+        .cache()
     };
 }
